@@ -805,7 +805,7 @@
         <div class="brand-badge">🧵</div>
         <div>
           <h1>Hilo Nativo · Votación Catálogo v8.0</h1>
-          <p>Árbol compacto genderless (23 ítems · 4 estilos) — Revisión y votación del equipo</p>
+          <p>Árbol compacto genderless (<span id="headerCountLabel">29</span> ítems · <span id="headerStylesLabel">5</span> estilos) — Revisión y votación del equipo</p>
         </div>
       </div>
 
@@ -829,10 +829,10 @@
       <div class="comic-card stat-panel">
         <div class="stat-title">Resumen del Voto (<span id="currentVoterLabel">Cristian</span>)</div>
         <div class="kpi-row">
-          <span class="kpi-chip ok">✅ Aprobadas: <strong id="countApprove">0</strong>/23</span>
+          <span class="kpi-chip ok">✅ Aprobadas: <strong id="countApprove">0</strong>/<span id="totalCatalogLabel">29</span></span>
           <span class="kpi-chip adj">✏️ Ajustar: <strong id="countAdjust">0</strong></span>
           <span class="kpi-chip no">❌ Descartadas: <strong id="countDiscard">0</strong></span>
-          <span class="kpi-chip pend">⏳ Pendientes: <strong id="countPending">23</strong></span>
+          <span class="kpi-chip pend">⏳ Pendientes: <strong id="countPending">29</strong></span>
         </div>
       </div>
 
@@ -911,7 +911,7 @@
         <h2>📤 Consolidar y Exportar mi Votación (<span id="partnerExportVoterLabel">Socio</span>)</h2>
       </div>
       <p style="margin:0 0 12px; font-size:0.88rem; color:var(--ink-muted);">
-        Cuando termines de revisar las 23 prendas y escribir tus comentarios o propuestas, consolida y descarga tu archivo de votación:
+        Cuando termines de revisar las <span id="partnerCountLabel">29</span> prendas y escribir tus comentarios o propuestas, consolida y descarga tu archivo de votación:
       </p>
 
       <div class="export-controls" style="margin-top:0;">
@@ -1015,12 +1015,13 @@
       }
 
       const SHEETS = [
-        { id: 'overview', label: '🌟 4 Estilos (Avatares)', src: 'assets/styles_overview.png', title: 'Vista General: 4 Pilares Estéticos en Avatares de Medellín' },
+        { id: 'overview', label: '🌟 5 Estilos (Avatares)', src: 'assets/styles_overview.png', title: 'Vista General: 5 Pilares Estéticos en Avatares de Medellín (incluye Rockero)' },
         { id: 'top', label: '👕 Tops (T1–T5)', src: 'assets/sheet_tops.png', title: 'Lámina Tops — Camisetas, Crop Top, Jersey y Camisa (T1–T5)' },
         { id: 'bottom', label: '👖 Bottoms (B1–B5)', src: 'assets/sheet_bottoms.png', title: 'Lámina Bottoms — Jeans, Cargo, Recto, Falda y Jogger (B1–B5)' },
         { id: 'outerwear', label: '🧥 Outerwear (O1–O5)', src: 'assets/sheet_outerwear.png', title: 'Lámina Outerwear y Pieza Completa (O1–O5)' },
         { id: 'footwear', label: '👟 Calzado (S1–S4)', src: 'assets/sheet_footwear.png', title: 'Lámina Calzado — Chunky, Skate, Runner y Botas (S1–S4)' },
-        { id: 'accessory', label: '🕶️ Accesorios (A1–A4)', src: 'assets/sheet_accessories.png', title: 'Lámina Accesorios — Gorra, Gafas, Bandolera y Beanie (A1–A4)' }
+        { id: 'accessory', label: '🕶️ Accesorios (A1–A4)', src: 'assets/sheet_accessories.png', title: 'Lámina Accesorios — Gorra, Gafas, Bandolera y Beanie (A1–A4)' },
+        { id: 'rockero', label: '🎸 Pack Rockero (T6–A5)', src: 'assets/sheet_rockero.png', title: 'Lámina Pack Rockero / Alternativo — Prendas y Accesorios (T6, B6, O6, O7, S5, A5)' }
       ];
 
       // Coordenadas exactas medidas sobre las láminas PNG (1376x768) para encuadrar cada prenda
@@ -1030,28 +1031,34 @@
         T3: { x0: 0.398, y0: 0.255, w: 0.205, h: 0.545 },
         T4: { x0: 0.590, y0: 0.255, w: 0.205, h: 0.545 },
         T5: { x0: 0.780, y0: 0.255, w: 0.205, h: 0.545 },
+        T6: { x0: 0.048, y0: 0.052, w: 0.216, h: 0.460 },
 
         B1: { x0: 0.014, y0: 0.145, w: 0.194, h: 0.780 },
         B2: { x0: 0.208, y0: 0.145, w: 0.194, h: 0.780 },
         B3: { x0: 0.403, y0: 0.145, w: 0.194, h: 0.780 },
         B4: { x0: 0.597, y0: 0.145, w: 0.194, h: 0.780 },
         B5: { x0: 0.791, y0: 0.145, w: 0.194, h: 0.780 },
+        B6: { x0: 0.392, y0: 0.052, w: 0.216, h: 0.460 },
 
         O1: { x0: 0.016, y0: 0.255, w: 0.204, h: 0.580 },
         O2: { x0: 0.193, y0: 0.255, w: 0.204, h: 0.580 },
         O3: { x0: 0.398, y0: 0.255, w: 0.204, h: 0.580 },
         O4: { x0: 0.590, y0: 0.255, w: 0.204, h: 0.580 },
         O5: { x0: 0.778, y0: 0.255, w: 0.204, h: 0.580 },
+        O6: { x0: 0.745, y0: 0.052, w: 0.222, h: 0.460 },
+        O7: { x0: 0.048, y0: 0.542, w: 0.218, h: 0.448 },
 
         S1: { x0: 0.025, y0: 0.175, w: 0.242, h: 0.520 },
         S2: { x0: 0.261, y0: 0.175, w: 0.242, h: 0.520 },
         S3: { x0: 0.497, y0: 0.175, w: 0.242, h: 0.520 },
         S4: { x0: 0.733, y0: 0.175, w: 0.242, h: 0.520 },
+        S5: { x0: 0.395, y0: 0.542, w: 0.236, h: 0.448 },
 
         A1: { x0: 0.024, y0: 0.240, w: 0.240, h: 0.575 },
         A2: { x0: 0.261, y0: 0.240, w: 0.240, h: 0.575 },
         A3: { x0: 0.495, y0: 0.240, w: 0.240, h: 0.575 },
-        A4: { x0: 0.734, y0: 0.240, w: 0.240, h: 0.575 }
+        A4: { x0: 0.734, y0: 0.240, w: 0.240, h: 0.575 },
+        A5: { x0: 0.738, y0: 0.542, w: 0.228, h: 0.448 }
       };
 
       const IMG_RATIO = 1376 / 768;
@@ -1229,6 +1236,10 @@
           else pending++;
         });
 
+        document.getElementById('headerCountLabel').textContent = garments.length;
+        document.getElementById('headerStylesLabel').textContent = appState.catalog.styles.length;
+        document.getElementById('totalCatalogLabel').textContent = garments.length;
+        document.getElementById('partnerCountLabel').textContent = garments.length;
         document.getElementById('countApprove').textContent = approve;
         document.getElementById('countAdjust').textContent = adjust;
         document.getElementById('countDiscard').textContent = discard;
@@ -1288,7 +1299,7 @@
 
         makeChips(
           'slotFilters',
-          [{ id: 'all', label: 'Todas (23)' }].concat(
+          [{ id: 'all', label: `Todas (${appState.catalog.garments.length})` }].concat(
             appState.catalog.slots.map((s) => ({ id: s.id, label: `${s.icon} ${s.short_name}` }))
           ),
           appState.filters.slot,
@@ -1307,7 +1318,18 @@
             appState.catalog.styles.map((s) => ({ id: s.id, label: `${s.icon} ${s.short_label}` }))
           ),
           appState.filters.style,
-          (id) => { appState.filters.style = id; renderFilters(); renderGarments(); }
+          (id) => {
+            appState.filters.style = id;
+            if (id === 'rockero') {
+              appState.activeSheetId = 'rockero';
+              renderGallery();
+            } else if (id === 'all' && appState.filters.slot === 'all') {
+              appState.activeSheetId = 'overview';
+              renderGallery();
+            }
+            renderFilters();
+            renderGarments();
+          }
         );
 
         makeChips(

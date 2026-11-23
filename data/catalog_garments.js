@@ -34,6 +34,14 @@ window.HN_CATALOG_DATA = {
       "color": "#eab308",
       "icon": "🎓",
       "description": "Piezas estructuradas pero relajadas y versátiles para grados, celebraciones familiares o eventos."
+    },
+    {
+      "id": "rockero",
+      "name": "Rockero / Alternativo",
+      "short_label": "Rockero",
+      "color": "#dc2626",
+      "icon": "🎸",
+      "description": "Estética rock, grunge y alternativa con camisetas vintage de banda, denim oscuro desgastado, chaqueta biker/franela, calzado de combate o lona alta y detalles metálicos."
     }
   ],
   "occasions": [
@@ -245,6 +253,34 @@ window.HN_CATALOG_DATA = {
       "biodegradabilidad_dulce_pct": 0,
       "es_mezcla": false,
       "badge_visual": "Reciclado · Menor CO₂"
+    },
+    "cuero_vacuno": {
+      "id": "cuero_vacuno",
+      "name": "Cuero Animal (Curtido)",
+      "short_label": "Cuero Animal",
+      "icon": "🐄",
+      "color": "#fde68a",
+      "agua_l_kg": 17000,
+      "co2_kg_kg": 17.0,
+      "micro_g_lavado": 0.0,
+      "circularidad_pct": 20,
+      "biodegradabilidad_dulce_pct": 10,
+      "es_mezcla": false,
+      "badge_visual": "Curtiembre · Alto CO₂/Agua"
+    },
+    "denim_acid_wash": {
+      "id": "denim_acid_wash",
+      "name": "Denim Desgastado (Acid-Wash)",
+      "short_label": "Denim Lavado",
+      "icon": "🧪",
+      "color": "#e2e8f0",
+      "agua_l_kg": 10000,
+      "co2_kg_kg": 5.8,
+      "micro_g_lavado": 0.0,
+      "circularidad_pct": 45,
+      "biodegradabilidad_dulce_pct": 65,
+      "es_mezcla": false,
+      "badge_visual": "Acid-Wash · Químicos/Agua"
     }
   },
   "origins_reference": {
@@ -434,6 +470,36 @@ window.HN_CATALOG_DATA = {
       "is_reference_aesthetic": false
     },
     {
+      "id": "T6",
+      "slug": "camiseta-vintage-banda",
+      "slot": "top",
+      "name": "Camiseta Vintage Banda / Rock",
+      "short_label": "Camiseta Banda",
+      "description": "Camiseta boxy efecto lavado acid-wash con gráfico retro-rock original; abre el debate de tintas plastisol vs. segunda mano.",
+      "styles": [
+        "rockero",
+        "urbano"
+      ],
+      "occasions": [
+        "fiesta_cita",
+        "diario_u",
+        "estreno_navidad"
+      ],
+      "weight_kg": 0.23,
+      "base_price_cop": 48000,
+      "allows_oversize": true,
+      "compatible_materials": [
+        "algodon_convencional",
+        "algodon_organico",
+        "mezcla_polialgodon",
+        "rpet_reciclado"
+      ],
+      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_code": "T6",
+      "svg_layer_slot": "layer_top",
+      "is_reference_aesthetic": false
+    },
+    {
       "id": "B1",
       "slug": "jeans-baggy-wide-leg",
       "slot": "bottom",
@@ -529,7 +595,8 @@ window.HN_CATALOG_DATA = {
       "description": "Falda corta plisada a cuadros o recta utilitaria abierta a cualquier avatar (100% genderless).",
       "styles": [
         "aesthetic_y2k",
-        "urbano"
+        "urbano",
+        "rockero"
       ],
       "occasions": [
         "estreno_navidad",
@@ -580,6 +647,36 @@ window.HN_CATALOG_DATA = {
       "is_reference_aesthetic": false
     },
     {
+      "id": "B6",
+      "slug": "jean-negro-desgastado",
+      "slot": "bottom",
+      "name": "Jean Negro Desgastado / Ripped",
+      "short_label": "Jean Ripped",
+      "description": "Denim carbón/negro con lavado vintage y roturas moderadas adaptable con deslizador de entallado a grunge holgado.",
+      "styles": [
+        "rockero",
+        "urbano"
+      ],
+      "occasions": [
+        "fiesta_cita",
+        "diario_u",
+        "estreno_navidad"
+      ],
+      "weight_kg": 0.65,
+      "base_price_cop": 82000,
+      "allows_oversize": true,
+      "compatible_materials": [
+        "denim_acid_wash",
+        "algodon_convencional",
+        "algodon_organico",
+        "mezcla_polialgodon"
+      ],
+      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_code": "B6",
+      "svg_layer_slot": "layer_bottom",
+      "is_reference_aesthetic": false
+    },
+    {
       "id": "O1",
       "slug": "buzo-hoodie-oversize",
       "slot": "outerwear",
@@ -617,7 +714,8 @@ window.HN_CATALOG_DATA = {
       "description": "Prenda abierta de mezclilla o lona inspirada directamente en la imagen de referencia.",
       "styles": [
         "urbano",
-        "aesthetic_y2k"
+        "aesthetic_y2k",
+        "rockero"
       ],
       "occasions": [
         "estreno_navidad",
@@ -726,6 +824,63 @@ window.HN_CATALOG_DATA = {
       "is_reference_aesthetic": false
     },
     {
+      "id": "O6",
+      "slug": "chaqueta-biker-rockera",
+      "slot": "outerwear",
+      "name": "Chaqueta Biker Rockera",
+      "short_label": "Chaqueta Biker",
+      "description": "Chaqueta negra de solapas asimétricas y cierres metálicos; contrasta cuero animal, cuero sintético PU y segunda mano.",
+      "styles": [
+        "rockero"
+      ],
+      "occasions": [
+        "fiesta_cita",
+        "estreno_navidad",
+        "diario_u"
+      ],
+      "weight_kg": 0.95,
+      "base_price_cop": 120000,
+      "allows_oversize": true,
+      "compatible_materials": [
+        "cuero_sintetico_pu",
+        "cuero_vacuno",
+        "polimero_reciclado"
+      ],
+      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_code": "O6",
+      "svg_layer_slot": "layer_outer",
+      "is_reference_aesthetic": false
+    },
+    {
+      "id": "O7",
+      "slug": "camisa-franela-cuadros-grunge",
+      "slot": "outerwear",
+      "name": "Camisa Franela Cuadros Grunge",
+      "short_label": "Franela Grunge",
+      "description": "Camisa holgada de franela a cuadros rojo/negro para llevar abierta en capas o a la cintura, icono grunge noventero.",
+      "styles": [
+        "rockero",
+        "urbano"
+      ],
+      "occasions": [
+        "diario_u",
+        "fiesta_cita",
+        "estreno_navidad"
+      ],
+      "weight_kg": 0.36,
+      "base_price_cop": 64000,
+      "allows_oversize": true,
+      "compatible_materials": [
+        "algodon_convencional",
+        "algodon_organico",
+        "mezcla_polialgodon"
+      ],
+      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_code": "O7",
+      "svg_layer_slot": "layer_outer",
+      "is_reference_aesthetic": false
+    },
+    {
       "id": "S1",
       "slug": "tenis-chunky-plataforma",
       "slot": "footwear",
@@ -763,7 +918,8 @@ window.HN_CATALOG_DATA = {
       "description": "Zapatillas de lona con suela plana de goma clásicas de la cultura skate y uso diario.",
       "styles": [
         "urbano",
-        "aesthetic_y2k"
+        "aesthetic_y2k",
+        "rockero"
       ],
       "occasions": [
         "diario_u",
@@ -818,7 +974,8 @@ window.HN_CATALOG_DATA = {
       "description": "Botín táctico o calzado cerrado sobrio adaptable a grados, eventos y estética alternativa.",
       "styles": [
         "casual_formal",
-        "aesthetic_y2k"
+        "aesthetic_y2k",
+        "rockero"
       ],
       "occasions": [
         "graduacion_evento",
@@ -830,10 +987,42 @@ window.HN_CATALOG_DATA = {
       "allows_oversize": false,
       "compatible_materials": [
         "cuero_sintetico_pu",
+        "cuero_vacuno",
         "polimero_reciclado"
       ],
       "sheet_image": "assets/sheet_footwear.png",
       "sheet_code": "S4",
+      "svg_layer_slot": "layer_shoes",
+      "is_reference_aesthetic": false
+    },
+    {
+      "id": "S5",
+      "slug": "tenis-bota-lona-alta",
+      "slot": "footwear",
+      "name": "Tenis Bota Lona Alta (High-Top)",
+      "short_label": "Bota Lona Alta",
+      "description": "Zapatillas clásicas de lona negra caña alta con suela vulcanizada blanca, referente del rock alternativo, punk e indie.",
+      "styles": [
+        "rockero",
+        "urbano",
+        "aesthetic_y2k"
+      ],
+      "occasions": [
+        "diario_u",
+        "fiesta_cita",
+        "estreno_navidad"
+      ],
+      "weight_kg": 0.76,
+      "base_price_cop": 82000,
+      "allows_oversize": false,
+      "compatible_materials": [
+        "algodon_convencional",
+        "algodon_organico",
+        "mezcla_polialgodon",
+        "rpet_reciclado"
+      ],
+      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_code": "S5",
       "svg_layer_slot": "layer_shoes",
       "is_reference_aesthetic": false
     },
@@ -932,7 +1121,8 @@ window.HN_CATALOG_DATA = {
       "description": "Gorro tejido de punto suave con detalle minimalista de cadena para looks aesthetic.",
       "styles": [
         "aesthetic_y2k",
-        "urbano"
+        "urbano",
+        "rockero"
       ],
       "occasions": [
         "estreno_navidad",
@@ -949,6 +1139,35 @@ window.HN_CATALOG_DATA = {
       ],
       "sheet_image": "assets/sheet_accessories.png",
       "sheet_code": "A4",
+      "svg_layer_slot": "layer_acc",
+      "is_reference_aesthetic": false
+    },
+    {
+      "id": "A5",
+      "slug": "cinturon-ojales-cadena",
+      "slot": "accessory",
+      "name": "Cinturón Ojales & Cadena Pantalón",
+      "short_label": "Cinturón & Cadena",
+      "description": "Cinturón negro con ojales metálicos y cadena lateral plateada; visibiliza el reto de reciclaje de fornituras metálicas.",
+      "styles": [
+        "rockero",
+        "aesthetic_y2k"
+      ],
+      "occasions": [
+        "fiesta_cita",
+        "diario_u",
+        "estreno_navidad"
+      ],
+      "weight_kg": 0.22,
+      "base_price_cop": 32000,
+      "allows_oversize": false,
+      "compatible_materials": [
+        "cuero_sintetico_pu",
+        "cuero_vacuno",
+        "polimero_reciclado"
+      ],
+      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_code": "A5",
       "svg_layer_slot": "layer_acc",
       "is_reference_aesthetic": false
     }
