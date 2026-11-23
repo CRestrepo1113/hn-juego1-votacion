@@ -496,6 +496,36 @@ window.HN_CATALOG_DATA = {
       "is_reference_aesthetic": false
     },
     {
+      "id": "T7",
+      "slug": "camiseta-jersey-sporty-oversize",
+      "slot": "top",
+      "name": "Camiseta Jersey Sporty Oversize",
+      "short_label": "Camiseta Jersey",
+      "description": "Camiseta amplia tipo jersey universitario/deportivo en malla o algodón pesado para usar como prenda superior.",
+      "styles": [
+        "aesthetic_y2k",
+        "deportivo"
+      ],
+      "occasions": [
+        "estreno_navidad",
+        "fiesta_cita",
+        "diario_u"
+      ],
+      "weight_kg": 0.24,
+      "base_price_cop": 52000,
+      "allows_oversize": true,
+      "compatible_materials": [
+        "algodon_convencional",
+        "algodon_organico",
+        "poliester_virgen",
+        "rpet_reciclado"
+      ],
+      "sheet_image": "assets/sheet_tops.png",
+      "sheet_code": "T7",
+      "svg_layer_slot": "layer_top",
+      "is_reference_aesthetic": false
+    },
+    {
       "id": "B1",
       "slug": "jeans-baggy-wide-leg",
       "slot": "bottom",
@@ -783,28 +813,28 @@ window.HN_CATALOG_DATA = {
     },
     {
       "id": "O5",
-      "slug": "vestido-camisetero-sporty",
+      "slug": "vestido-casual-fluido",
       "slot": "outerwear",
-      "name": "Vestido Camisetero / Sporty",
-      "short_label": "Vestido Jersey",
-      "description": "Pieza completa holgada tipo jersey deportivo o camiseta extra larga abierta a todo avatar.",
+      "name": "Vestido Casual Fluido",
+      "short_label": "Vestido Casual",
+      "description": "Vestido femenino fresco de caída fluida y corte en A para clima cálido de Medellín, salidas y uso diario.",
       "styles": [
         "aesthetic_y2k",
-        "deportivo"
+        "urbano"
       ],
       "occasions": [
-        "estreno_navidad",
+        "diario_u",
         "fiesta_cita",
-        "diario_u"
+        "estreno_navidad"
       ],
-      "weight_kg": 0.32,
-      "base_price_cop": 62000,
-      "allows_oversize": true,
+      "weight_kg": 0.34,
+      "base_price_cop": 72000,
+      "allows_oversize": false,
       "compatible_materials": [
-        "algodon_convencional",
         "algodon_organico",
-        "poliester_virgen",
-        "rpet_reciclado"
+        "lino_canamo",
+        "algodon_convencional",
+        "mezcla_polialgodon"
       ],
       "sheet_image": "assets/sheet_outerwear.png",
       "sheet_code": "O5",
@@ -864,6 +894,36 @@ window.HN_CATALOG_DATA = {
       ],
       "sheet_image": "assets/sheet_outerwear.png",
       "sheet_code": "O7",
+      "svg_layer_slot": "layer_outer",
+      "is_reference_aesthetic": false
+    },
+    {
+      "id": "O8",
+      "slug": "vestido-formal-evento",
+      "slot": "outerwear",
+      "name": "Vestido Formal / Evento",
+      "short_label": "Vestido Formal",
+      "description": "Vestido femenino midi estructurado con corte elegante para grados, cenas especiales y eventos formales en el Valle de Aburrá.",
+      "styles": [
+        "casual_formal"
+      ],
+      "occasions": [
+        "graduacion_evento",
+        "estreno_navidad",
+        "fiesta_cita"
+      ],
+      "weight_kg": 0.48,
+      "base_price_cop": 115000,
+      "allows_oversize": false,
+      "compatible_materials": [
+        "lino_canamo",
+        "algodon_organico",
+        "poliester_virgen",
+        "rpet_reciclado",
+        "mezcla_polialgodon"
+      ],
+      "sheet_image": "assets/sheet_outerwear.png",
+      "sheet_code": "O8",
       "svg_layer_slot": "layer_outer",
       "is_reference_aesthetic": false
     },

@@ -828,7 +828,7 @@
         <div class="brand-badge">🧵</div>
         <div>
           <h1>Hilo Nativo · Votación Catálogo v8.0</h1>
-          <p>Árbol compacto genderless (<span id="headerCountLabel">29</span> ítems · <span id="headerStylesLabel">5</span> estilos) — Revisión y votación del equipo</p>
+          <p>Árbol compacto genderless (<span id="headerCountLabel">31</span> ítems · <span id="headerStylesLabel">5</span> estilos) — Revisión y votación del equipo</p>
         </div>
       </div>
 
@@ -852,10 +852,10 @@
       <div class="comic-card stat-panel">
         <div class="stat-title">Resumen del Voto (<span id="currentVoterLabel">Cristian</span>)</div>
         <div class="kpi-row">
-          <span class="kpi-chip ok">✅ Aprobadas: <strong id="countApprove">0</strong>/<span id="totalCatalogLabel">29</span></span>
+          <span class="kpi-chip ok">✅ Aprobadas: <strong id="countApprove">0</strong>/<span id="totalCatalogLabel">31</span></span>
           <span class="kpi-chip adj">✏️ Ajustar: <strong id="countAdjust">0</strong></span>
           <span class="kpi-chip no">❌ Descartadas: <strong id="countDiscard">0</strong></span>
-          <span class="kpi-chip pend">⏳ Pendientes: <strong id="countPending">29</strong></span>
+          <span class="kpi-chip pend">⏳ Pendientes: <strong id="countPending">31</strong></span>
         </div>
       </div>
 
@@ -906,7 +906,7 @@
     <!-- Barra de Resultados y Limpieza de Filtros de Vista -->
     <div class="results-bar" id="resultsBar">
       <div class="results-meta">
-        <span>Mostrando <strong id="visibleCountLabel">29</strong> de <strong id="resultsTotalLabel">29</strong> prendas</span>
+        <span>Mostrando <strong id="visibleCountLabel">31</strong> de <strong id="resultsTotalLabel">31</strong> prendas</span>
         <span id="activeFiltersSummary" style="color:var(--ink-muted); font-weight:600;"></span>
       </div>
       <button type="button" class="pill-btn" id="btnClearViewFilters" style="display:none; padding:5px 12px; font-size:0.8rem;">
@@ -939,7 +939,7 @@
         <h2>📤 Consolidar y Exportar mi Votación (<span id="partnerExportVoterLabel">Socio</span>)</h2>
       </div>
       <p style="margin:0 0 12px; font-size:0.88rem; color:var(--ink-muted);">
-        Cuando termines de revisar las <span id="partnerCountLabel">29</span> prendas y escribir tus comentarios o propuestas, consolida y descarga tu archivo de votación:
+        Cuando termines de revisar las <span id="partnerCountLabel">31</span> prendas y escribir tus comentarios o propuestas, consolida y descarga tu archivo de votación:
       </p>
 
       <div class="export-controls" style="margin-top:0;">
@@ -1044,21 +1044,22 @@
 
       const SHEETS = [
         { id: 'overview', label: '🌟 5 Estilos (Avatares)', src: 'assets/styles_overview.png', title: 'Vista General: 5 Pilares Estéticos en Avatares de Medellín' },
-        { id: 'top', label: '👕 Superiores (T1–T6)', src: 'assets/sheet_tops.png', title: 'Lámina Prendas Superiores — Camisetas, Crop Top, Jersey, Camisa y Banda (T1–T6)' },
+        { id: 'top', label: '👕 Superiores (T1–T7)', src: 'assets/sheet_tops.png', title: 'Lámina Prendas Superiores — Camisetas, Crop Top, Jerseys, Camisa y Banda (T1–T7)' },
         { id: 'bottom', label: '👖 Inferiores (B1–B6)', src: 'assets/sheet_bottoms.png', title: 'Lámina Prendas Inferiores — Jeans, Cargo, Recto, Falda, Jogger y Ripped (B1–B6)' },
-        { id: 'outerwear', label: '🧥 Chaquetas y Piezas (O1–O7)', src: 'assets/sheet_outerwear.png', title: 'Lámina Chaquetas y Piezas Completas — Hoodie, Chaleco, Cortavientos, Blazer, Vestido, Biker y Franela (O1–O7)' },
+        { id: 'outerwear', label: '🧥 Chaquetas y Piezas (O1–O8)', src: 'assets/sheet_outerwear.png', title: 'Lámina Chaquetas y Piezas Completas — Hoodie, Chaleco, Cortavientos, Blazer, Vestidos, Biker y Franela (O1–O8)' },
         { id: 'footwear', label: '👟 Calzado (S1–S5)', src: 'assets/sheet_footwear.png', title: 'Lámina Calzado — Chunky, Skate, Runner, Botas y Lona Alta (S1–S5)' },
         { id: 'accessory', label: '🕶️ Accesorios (A1–A5)', src: 'assets/sheet_accessories.png', title: 'Lámina Accesorios — Gorra, Gafas, Bandolera, Beanie y Cinturón/Cadena (A1–A5)' }
       ];
 
       // Coordenadas exactas medidas sobre las 5 láminas unificadas PNG (1376x768)
       const CROP_BOXES = {
-        T1: { x0: 0.0305, y0: 0.0417, w: 0.3014, h: 0.4440 },
-        T2: { x0: 0.3493, y0: 0.0417, w: 0.3014, h: 0.4440 },
-        T3: { x0: 0.6681, y0: 0.0417, w: 0.3014, h: 0.4440 },
-        T4: { x0: 0.0305, y0: 0.5143, w: 0.3014, h: 0.4440 },
-        T5: { x0: 0.3493, y0: 0.5143, w: 0.3014, h: 0.4440 },
-        T6: { x0: 0.6681, y0: 0.5143, w: 0.3014, h: 0.4440 },
+        T1: { x0: 0.0305, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        T2: { x0: 0.2696, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        T3: { x0: 0.5087, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        T4: { x0: 0.7478, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        T5: { x0: 0.1501, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        T6: { x0: 0.3892, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        T7: { x0: 0.6283, y0: 0.5143, w: 0.2217, h: 0.4440 },
 
         B1: { x0: 0.0305, y0: 0.0417, w: 0.3014, h: 0.4440 },
         B2: { x0: 0.3493, y0: 0.0417, w: 0.3014, h: 0.4440 },
@@ -1071,9 +1072,10 @@
         O2: { x0: 0.2696, y0: 0.0417, w: 0.2217, h: 0.4440 },
         O3: { x0: 0.5087, y0: 0.0417, w: 0.2217, h: 0.4440 },
         O4: { x0: 0.7478, y0: 0.0417, w: 0.2217, h: 0.4440 },
-        O5: { x0: 0.1501, y0: 0.5143, w: 0.2217, h: 0.4440 },
-        O6: { x0: 0.3892, y0: 0.5143, w: 0.2217, h: 0.4440 },
-        O7: { x0: 0.6283, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        O5: { x0: 0.0305, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        O6: { x0: 0.2696, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        O7: { x0: 0.5087, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        O8: { x0: 0.7478, y0: 0.5143, w: 0.2217, h: 0.4440 },
 
         S1: { x0: 0.0305, y0: 0.0417, w: 0.3014, h: 0.4440 },
         S2: { x0: 0.3493, y0: 0.0417, w: 0.3014, h: 0.4440 },
