@@ -401,8 +401,7 @@
       position: relative;
       overflow: hidden;
       border-radius: 10px;
-      height: 100%;
-      max-width: 100%;
+      flex-shrink: 0;
     }
 
     .crop-viewport img {
@@ -600,6 +599,62 @@
       padding-left: 18px;
     }
 
+    /* Partner Export Panel & Drive Instructions */
+    .partner-export-panel {
+      padding: 20px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    }
+
+    .drive-instructions {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: #ffffff;
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      font-size: 0.88rem;
+    }
+
+    .drive-instructions ol {
+      margin: 8px 0 12px;
+      padding-left: 20px;
+    }
+
+    .drive-instructions li {
+      margin-bottom: 6px;
+    }
+
+    .drive-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      background: var(--gold);
+      color: var(--ink);
+      box-shadow: 2px 2px 0px var(--ink);
+      transition: transform 0.1s ease;
+    }
+
+    .drive-link-btn:hover {
+      transform: translate(-1px, -1px);
+    }
+
+    .voter-banner {
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      background: #fef9c3;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     /* Export & Consensus Section */
     .export-panel {
       padding: 18px;
@@ -750,11 +805,11 @@
         <div class="brand-badge">🧵</div>
         <div>
           <h1>Hilo Nativo · Votación Catálogo v8.0</h1>
-          <p>Árbol compacto genderless (23 ítems · 4 estilos) — Fuente directa para Django ORM</p>
+          <p>Árbol compacto genderless (23 ítems · 4 estilos) — Revisión y votación del equipo</p>
         </div>
       </div>
 
-      <div class="voter-box" aria-label="Selector de socio votante">
+      <div class="voter-box" id="voterSelectorBox" aria-label="Selector de socio votante">
         <span class="voter-label">Votando como:</span>
         <button type="button" class="pill-btn voter-btn" data-voter="Cristian">Cristian</button>
         <button type="button" class="pill-btn voter-btn" data-voter="John">John</button>
@@ -762,6 +817,12 @@
         <button type="button" class="pill-btn voter-btn" data-voter="Mileidy">Mileidy</button>
       </div>
     </header>
+
+    <!-- Aviso si aún no se selecciona socio -->
+    <div class="comic-card voter-banner" id="voterPromptBanner" style="display:none;">
+      <span>👋</span>
+      <span>Selecciona tu nombre arriba (<strong>Cristian</strong>, <strong>John</strong>, <strong>Laura</strong> o <strong>Mileidy</strong>) para registrar tus elecciones y comentarios.</span>
+    </div>
 
     <!-- Paneles de Resumen y Balance por Estilo -->
     <section class="stats-grid">
@@ -831,8 +892,8 @@
     <!-- Propuestas Nuevas y Comentarios Generales del Socio -->
     <section class="comic-card proposal-panel">
       <div class="section-head" style="margin-bottom:4px;">
-        <h2>💡 Propuestas de nuevas prendas o comentarios generales (<span id="proposalVoterLabel">Cristian</span>)</h2>
-        <span class="meta-pill">Se incluye al exportar voto y al copiar resumen</span>
+        <h2>💡 Propuestas de nuevas prendas o comentarios generales (<span id="proposalVoterLabel">Sin seleccionar</span>)</h2>
+        <span class="meta-pill">Se guarda automáticamente con tu votación</span>
       </div>
       <p style="margin:0; font-size:0.84rem; color:var(--ink-muted);">
         ¿Falta alguna prenda representativa, estilo, accesorio o ajuste en los materiales/precios? Escríbelo aquí para revisarlo en equipo:
@@ -844,14 +905,49 @@
       ></textarea>
     </section>
 
-    <!-- Integración Directa Django & Consenso de Socios -->
-    <section class="comic-card export-panel">
+    <!-- Panel Simplificado para Socios (John, Laura, Mileidy) -->
+    <section class="comic-card partner-export-panel" id="partnerExportPanel">
+      <div class="section-head" style="margin-bottom:6px;">
+        <h2>📤 Consolidar y Exportar mi Votación (<span id="partnerExportVoterLabel">Socio</span>)</h2>
+      </div>
+      <p style="margin:0 0 12px; font-size:0.88rem; color:var(--ink-muted);">
+        Cuando termines de revisar las 23 prendas y escribir tus comentarios o propuestas, consolida y descarga tu archivo de votación:
+      </p>
+
+      <div class="export-controls" style="margin-top:0;">
+        <button type="button" class="pill-btn success" id="btnPartnerExport" style="padding:10px 18px; font-size:0.94rem;">
+          📦 Consolidar y Exportar mi Votación (.json)
+        </button>
+      </div>
+
+      <div class="drive-instructions">
+        <strong>📌 Instrucciones para entregar tu votación:</strong>
+        <ol>
+          <li>Haz clic en el botón <strong>"📦 Consolidar y Exportar mi Votación (.json)"</strong> de arriba. Se descargará un archivo pequeño llamado <code id="expectedFilenameHint">voto_hn_juego1_tu_nombre.json</code> en tu computador o celular.</li>
+          <li>Abre la subcarpeta <strong>Votacion_Prendas</strong> en el Google Drive del proyecto usando el enlace de abajo.</li>
+          <li>Sube allí el archivo <code>.json</code> descargado (arrastrándolo a la carpeta o con el botón <em>"+ Nuevo ➔ Subir archivo"</em>) para que podamos consolidar las elecciones de todo el equipo.</li>
+        </ol>
+        <a
+          class="drive-link-btn"
+          href="https://drive.google.com/drive/folders/1SqNJuof_5nrMvVDqm4WjrwwSrPiJtgH4"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          📂 Abrir carpeta Votacion_Prendas en Google Drive ↗
+        </a>
+      </div>
+    </section>
+
+    <!-- Panel de Coordinación (Solo visible cuando Cristian está seleccionado) -->
+    <section class="comic-card export-panel" id="adminExportPanel" style="display:none;">
       <div class="section-head">
-        <h2>⚙️ Integración a Django y Consenso del Equipo</h2>
+        <h2>⚙️ Integración a Django y Consenso del Equipo (Coordinación · Cristian)</h2>
         <span class="meta-pill">Formato compatible con <code>python manage.py loaddata</code></span>
       </div>
       <p style="margin:0; font-size:0.86rem; color:var(--ink-muted);">
-        Cada socio puede votar desde este archivo, exportar su archivo de voto JSON y luego consolidar las 4 votaciones para generar el <em>Django Fixture</em> definitivo del Sprint 1.
+        Descarga los archivos <code>voto_hn_juego1_*.json</code> que suban los socios a la carpeta
+        <a href="https://drive.google.com/drive/folders/1SqNJuof_5nrMvVDqm4WjrwwSrPiJtgH4" target="_blank" rel="noopener noreferrer" style="color:#0284c7; font-weight:700;">Votacion_Prendas en Google Drive</a>
+        e impórtalos aquí para consolidar la matriz de los 4 socios y exportar el <em>Django Fixture</em> definitivo del Sprint 1.
       </p>
 
       <div class="export-controls">
@@ -860,7 +956,7 @@
           Incluir ítems marcados "✏️ Ajustar" en el Fixture de Django
         </label>
         <button type="button" class="pill-btn success" id="btnDownloadFixture">⬇️ Descargar Django Fixture (.json)</button>
-        <button type="button" class="pill-btn primary" id="btnExportVoterJson">📤 Exportar Voto del Socio (.json)</button>
+        <button type="button" class="pill-btn primary" id="btnExportVoterJson">📤 Exportar mi Voto (.json)</button>
         <button type="button" class="pill-btn" id="btnImportVotes">📥 Importar / Consolidar Votos (.json)</button>
         <input type="file" id="fileImportVotes" class="hidden-input" accept=".json" multiple />
         <button type="button" class="pill-btn" id="btnCopySummary">📋 Copiar Resumen (WhatsApp / Notion)</button>
@@ -905,6 +1001,8 @@
     (function () {
       const STORAGE_KEY = 'hn_juego1_votes_v1';
       const PROPOSALS_KEY = 'hn_juego1_proposals_v1';
+      const ACTIVE_VOTER_KEY = 'hn_juego1_active_voter_v1';
+      const ADMIN_VOTER = 'Cristian';
       const VOTERS = ['Cristian', 'John', 'Laura', 'Mileidy'];
 
       function escapeHtml(str) {
@@ -958,9 +1056,18 @@
 
       const IMG_RATIO = 1376 / 768;
 
+      function loadActiveVoter() {
+        try {
+          const saved = localStorage.getItem(ACTIVE_VOTER_KEY);
+          return VOTERS.includes(saved) ? saved : null;
+        } catch {
+          return null;
+        }
+      }
+
       const appState = {
         catalog: null,
-        voter: 'Cristian',
+        voter: loadActiveVoter(),
         activeSheetId: 'overview',
         filters: {
           slot: 'all',
@@ -1020,11 +1127,20 @@
         showToast._timer = setTimeout(() => el.classList.remove('show'), 2600);
       }
 
+      function requireVoterSelected() {
+        if (appState.voter) return true;
+        showToast('👆 Primero selecciona tu nombre arriba (Cristian, John, Laura o Mileidy)');
+        const box = document.getElementById('voterSelectorBox');
+        if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+
       function getCurrentVotes() {
-        return appState.votesByVoter[appState.voter] || {};
+        return appState.voter ? (appState.votesByVoter[appState.voter] || {}) : {};
       }
 
       function setGarmentVote(garmentId, decision) {
+        if (!requireVoterSelected()) return;
         const votes = getCurrentVotes();
         const existing = votes[garmentId] || { status: null, note: '' };
         const nextStatus = existing.status === decision ? null : decision;
@@ -1042,6 +1158,7 @@
       }
 
       function setGarmentNote(garmentId, noteText) {
+        if (!requireVoterSelected()) return;
         const votes = getCurrentVotes();
         const existing = votes[garmentId] || { status: null, note: '' };
         votes[garmentId] = {
@@ -1074,11 +1191,25 @@
       }
 
       function renderVoterButtons() {
-        document.getElementById('currentVoterLabel').textContent = appState.voter;
-        document.getElementById('proposalVoterLabel').textContent = appState.voter;
+        const hasVoter = Boolean(appState.voter);
+        const isAdmin = appState.voter === ADMIN_VOTER;
+        const displayName = hasVoter ? appState.voter : 'Selecciona tu nombre';
+
+        document.getElementById('currentVoterLabel').textContent = displayName;
+        document.getElementById('proposalVoterLabel').textContent = displayName;
+        document.getElementById('partnerExportVoterLabel').textContent = hasVoter ? appState.voter : 'Selecciona tu nombre arriba';
+        document.getElementById('expectedFilenameHint').textContent = hasVoter
+          ? `voto_hn_juego1_${appState.voter.toLowerCase()}.json`
+          : 'voto_hn_juego1_tu_nombre.json';
+
+        document.getElementById('voterPromptBanner').style.display = hasVoter ? 'none' : 'flex';
+        document.getElementById('adminExportPanel').style.display = isAdmin ? 'block' : 'none';
+        document.getElementById('partnerExportPanel').style.display = isAdmin ? 'none' : 'block';
+
         const propInput = document.getElementById('generalProposalInput');
-        if (propInput && propInput.value !== (appState.proposalsByVoter[appState.voter] || '')) {
-          propInput.value = appState.proposalsByVoter[appState.voter] || '';
+        const desiredVal = hasVoter ? (appState.proposalsByVoter[appState.voter] || '') : '';
+        if (propInput && propInput.value !== desiredVal) {
+          propInput.value = desiredVal;
         }
         document.querySelectorAll('.voter-btn').forEach((btn) => {
           btn.classList.toggle('active', btn.dataset.voter === appState.voter);
@@ -1161,7 +1292,13 @@
             appState.catalog.slots.map((s) => ({ id: s.id, label: `${s.icon} ${s.short_name}` }))
           ),
           appState.filters.slot,
-          (id) => { appState.filters.slot = id; renderFilters(); renderGarments(); }
+          (id) => {
+            appState.filters.slot = id;
+            appState.activeSheetId = id === 'all' ? 'overview' : id;
+            renderGallery();
+            renderFilters();
+            renderGarments();
+          }
         );
 
         makeChips(
@@ -1212,17 +1349,28 @@
         }
 
         const ratio = (box.w * IMG_RATIO) / box.h;
+        const maxH = 180;
+        const maxW = 236;
+        let targetW = Math.round(maxH * ratio);
+        let targetH = maxH;
+        if (targetW > maxW) {
+          targetW = maxW;
+          targetH = Math.round(targetW / ratio);
+        }
+
         const viewport = document.createElement('div');
         viewport.className = 'crop-viewport';
-        viewport.style.aspectRatio = ratio.toFixed(4);
+        viewport.style.width = `${targetW}px`;
+        viewport.style.height = `${targetH}px`;
 
         const img = document.createElement('img');
         img.src = garment.sheet_image;
         img.alt = `${garment.id} ${garment.name}`;
-        img.style.width = `${(100 / box.w).toFixed(4)}%`;
-        img.style.height = `${(100 / box.h).toFixed(4)}%`;
-        img.style.left = `-${((box.x0 / box.w) * 100).toFixed(4)}%`;
-        img.style.top = `-${((box.y0 / box.h) * 100).toFixed(4)}%`;
+        img.loading = 'eager';
+        img.style.width = `${Math.round(targetW / box.w)}px`;
+        img.style.height = `${Math.round(targetH / box.h)}px`;
+        img.style.left = `-${Math.round((box.x0 / box.w) * targetW)}px`;
+        img.style.top = `-${Math.round((box.y0 / box.h) * targetH)}px`;
 
         viewport.appendChild(img);
         wrap.appendChild(viewport);
@@ -1533,10 +1681,41 @@
         if (appState.consensusVisible) renderConsensusTable();
       }
 
+      function exportCurrentVoterJson() {
+        if (!requireVoterSelected()) return;
+        const votes = getCurrentVotes();
+        const votedCount = Object.values(votes).filter((v) => v && v.status).length;
+        const proposal = (appState.proposalsByVoter[appState.voter] || '').trim();
+        if (votedCount === 0 && !proposal) {
+          showToast('⚠️ Aún no has marcado ninguna prenda ni escrito una propuesta');
+          return;
+        }
+        const payload = {
+          project: appState.catalog.project,
+          voter: appState.voter,
+          exported_at: new Date().toISOString(),
+          summary: {
+            total_catalog: appState.catalog.garments.length,
+            voted_count: votedCount,
+            approved: Object.values(votes).filter((v) => v.status === 'approve').length,
+            adjust: Object.values(votes).filter((v) => v.status === 'adjust').length,
+            discard: Object.values(votes).filter((v) => v.status === 'discard').length
+          },
+          votes,
+          general_proposal: proposal
+        };
+        const filename = `voto_hn_juego1_${appState.voter.toLowerCase()}.json`;
+        downloadJson(filename, payload);
+        showToast(`📦 ${filename} descargado. ¡Súbelo a la carpeta Votacion_Prendas en Drive!`);
+      }
+
       function bindEvents() {
         document.querySelectorAll('.voter-btn').forEach((btn) => {
           btn.addEventListener('click', () => {
             appState.voter = btn.dataset.voter;
+            try {
+              localStorage.setItem(ACTIVE_VOTER_KEY, appState.voter);
+            } catch {}
             renderAll();
           });
         });
@@ -1568,6 +1747,7 @@
         });
 
         document.getElementById('btnApproveVisible').addEventListener('click', () => {
+          if (!requireVoterSelected()) return;
           const visible = getFilteredGarments();
           const votes = getCurrentVotes();
           visible.forEach((g) => {
@@ -1581,12 +1761,17 @@
         });
 
         document.getElementById('generalProposalInput').addEventListener('input', (e) => {
+          if (!requireVoterSelected()) {
+            e.target.value = '';
+            return;
+          }
           appState.proposalsByVoter[appState.voter] = e.target.value;
           saveStorage();
           if (appState.consensusVisible) renderConsensusTable();
         });
 
         document.getElementById('btnResetVoter').addEventListener('click', () => {
+          if (!requireVoterSelected()) return;
           if (!confirm(`¿Seguro que quieres borrar todos los votos y propuestas de ${appState.voter}?`)) return;
           appState.votesByVoter[appState.voter] = {};
           appState.proposalsByVoter[appState.voter] = '';
@@ -1595,7 +1780,10 @@
           showToast(`Votos de ${appState.voter} reiniciados`);
         });
 
+        document.getElementById('btnPartnerExport').addEventListener('click', exportCurrentVoterJson);
+
         document.getElementById('btnDownloadFixture').addEventListener('click', () => {
+          if (!requireVoterSelected()) return;
           const includeAdj = document.getElementById('chkIncludeAdjust').checked;
           const votes = getCurrentVotes();
           const selected = appState.catalog.garments.filter((g) => {
@@ -1611,17 +1799,7 @@
           showToast(`⬇️ Fixture Django descargado (${selected.length} prendas)`);
         });
 
-        document.getElementById('btnExportVoterJson').addEventListener('click', () => {
-          const payload = {
-            project: appState.catalog.project,
-            voter: appState.voter,
-            exported_at: new Date().toISOString(),
-            votes: getCurrentVotes(),
-            general_proposal: (appState.proposalsByVoter[appState.voter] || '').trim()
-          };
-          downloadJson(`voto_hn_juego1_${appState.voter.toLowerCase()}.json`, payload);
-          showToast(`📤 Voto y propuestas de ${appState.voter} exportados`);
-        });
+        document.getElementById('btnExportVoterJson').addEventListener('click', exportCurrentVoterJson);
 
         document.getElementById('btnImportVotes').addEventListener('click', () => {
           document.getElementById('fileImportVotes').click();
@@ -1721,6 +1899,10 @@
       }
 
       async function init() {
+        SHEETS.forEach((s) => {
+          const pre = new Image();
+          pre.src = s.src;
+        });
         if (window.HN_CATALOG_DATA) {
           appState.catalog = window.HN_CATALOG_DATA;
         } else {
