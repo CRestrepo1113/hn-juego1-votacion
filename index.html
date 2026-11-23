@@ -320,6 +320,29 @@
       color: #fff;
     }
 
+    .results-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+      background: #ffffff;
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      box-shadow: var(--shadow-comic-sm);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .results-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
     /* Garments Grid */
     .garments-grid {
       display: grid;
@@ -863,7 +886,7 @@
     <!-- Filtros Rápidos -->
     <section class="comic-card filters-bar">
       <div class="filter-row">
-        <span class="filter-group-label">Ranura</span>
+        <span class="filter-group-label">Categoría</span>
         <div id="slotFilters" class="filter-row"></div>
       </div>
       <div class="filter-row">
@@ -874,17 +897,22 @@
         <span class="filter-group-label">Ocasión</span>
         <div id="occasionFilters" class="filter-row"></div>
       </div>
-      <div class="filter-row" style="justify-content: space-between;">
-        <div class="filter-row">
-          <span class="filter-group-label">Estado</span>
-          <div id="voteFilters" class="filter-row"></div>
-        </div>
-        <div class="filter-row">
-          <button type="button" class="pill-btn" id="btnApproveVisible">✅ Aprobar visibles</button>
-          <button type="button" class="pill-btn" id="btnResetVoter">🗑️ Limpiar votos del socio</button>
-        </div>
+      <div class="filter-row">
+        <span class="filter-group-label">Estado</span>
+        <div id="voteFilters" class="filter-row"></div>
       </div>
     </section>
+
+    <!-- Barra de Resultados y Limpieza de Filtros de Vista -->
+    <div class="results-bar" id="resultsBar">
+      <div class="results-meta">
+        <span>Mostrando <strong id="visibleCountLabel">29</strong> de <strong id="resultsTotalLabel">29</strong> prendas</span>
+        <span id="activeFiltersSummary" style="color:var(--ink-muted); font-weight:600;"></span>
+      </div>
+      <button type="button" class="pill-btn" id="btnClearViewFilters" style="display:none; padding:5px 12px; font-size:0.8rem;">
+        ↺ Limpiar filtros
+      </button>
+    </div>
 
     <!-- Catálogo de Tarjetas -->
     <main class="garments-grid" id="garmentsGrid"></main>
@@ -1015,50 +1043,49 @@
       }
 
       const SHEETS = [
-        { id: 'overview', label: '🌟 5 Estilos (Avatares)', src: 'assets/styles_overview.png', title: 'Vista General: 5 Pilares Estéticos en Avatares de Medellín (incluye Rockero)' },
-        { id: 'top', label: '👕 Tops (T1–T5)', src: 'assets/sheet_tops.png', title: 'Lámina Tops — Camisetas, Crop Top, Jersey y Camisa (T1–T5)' },
-        { id: 'bottom', label: '👖 Bottoms (B1–B5)', src: 'assets/sheet_bottoms.png', title: 'Lámina Bottoms — Jeans, Cargo, Recto, Falda y Jogger (B1–B5)' },
-        { id: 'outerwear', label: '🧥 Outerwear (O1–O5)', src: 'assets/sheet_outerwear.png', title: 'Lámina Outerwear y Pieza Completa (O1–O5)' },
-        { id: 'footwear', label: '👟 Calzado (S1–S4)', src: 'assets/sheet_footwear.png', title: 'Lámina Calzado — Chunky, Skate, Runner y Botas (S1–S4)' },
-        { id: 'accessory', label: '🕶️ Accesorios (A1–A4)', src: 'assets/sheet_accessories.png', title: 'Lámina Accesorios — Gorra, Gafas, Bandolera y Beanie (A1–A4)' },
-        { id: 'rockero', label: '🎸 Pack Rockero (T6–A5)', src: 'assets/sheet_rockero.png', title: 'Lámina Pack Rockero / Alternativo — Prendas y Accesorios (T6, B6, O6, O7, S5, A5)' }
+        { id: 'overview', label: '🌟 5 Estilos (Avatares)', src: 'assets/styles_overview.png', title: 'Vista General: 5 Pilares Estéticos en Avatares de Medellín' },
+        { id: 'top', label: '👕 Superiores (T1–T6)', src: 'assets/sheet_tops.png', title: 'Lámina Prendas Superiores — Camisetas, Crop Top, Jersey, Camisa y Banda (T1–T6)' },
+        { id: 'bottom', label: '👖 Inferiores (B1–B6)', src: 'assets/sheet_bottoms.png', title: 'Lámina Prendas Inferiores — Jeans, Cargo, Recto, Falda, Jogger y Ripped (B1–B6)' },
+        { id: 'outerwear', label: '🧥 Chaquetas y Piezas (O1–O7)', src: 'assets/sheet_outerwear.png', title: 'Lámina Chaquetas y Piezas Completas — Hoodie, Chaleco, Cortavientos, Blazer, Vestido, Biker y Franela (O1–O7)' },
+        { id: 'footwear', label: '👟 Calzado (S1–S5)', src: 'assets/sheet_footwear.png', title: 'Lámina Calzado — Chunky, Skate, Runner, Botas y Lona Alta (S1–S5)' },
+        { id: 'accessory', label: '🕶️ Accesorios (A1–A5)', src: 'assets/sheet_accessories.png', title: 'Lámina Accesorios — Gorra, Gafas, Bandolera, Beanie y Cinturón/Cadena (A1–A5)' }
       ];
 
-      // Coordenadas exactas medidas sobre las láminas PNG (1376x768) para encuadrar cada prenda
+      // Coordenadas exactas medidas sobre las 5 láminas unificadas PNG (1376x768)
       const CROP_BOXES = {
-        T1: { x0: 0.015, y0: 0.255, w: 0.205, h: 0.545 },
-        T2: { x0: 0.206, y0: 0.255, w: 0.205, h: 0.545 },
-        T3: { x0: 0.398, y0: 0.255, w: 0.205, h: 0.545 },
-        T4: { x0: 0.590, y0: 0.255, w: 0.205, h: 0.545 },
-        T5: { x0: 0.780, y0: 0.255, w: 0.205, h: 0.545 },
-        T6: { x0: 0.048, y0: 0.052, w: 0.216, h: 0.460 },
+        T1: { x0: 0.0305, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        T2: { x0: 0.3493, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        T3: { x0: 0.6681, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        T4: { x0: 0.0305, y0: 0.5143, w: 0.3014, h: 0.4440 },
+        T5: { x0: 0.3493, y0: 0.5143, w: 0.3014, h: 0.4440 },
+        T6: { x0: 0.6681, y0: 0.5143, w: 0.3014, h: 0.4440 },
 
-        B1: { x0: 0.014, y0: 0.145, w: 0.194, h: 0.780 },
-        B2: { x0: 0.208, y0: 0.145, w: 0.194, h: 0.780 },
-        B3: { x0: 0.403, y0: 0.145, w: 0.194, h: 0.780 },
-        B4: { x0: 0.597, y0: 0.145, w: 0.194, h: 0.780 },
-        B5: { x0: 0.791, y0: 0.145, w: 0.194, h: 0.780 },
-        B6: { x0: 0.392, y0: 0.052, w: 0.216, h: 0.460 },
+        B1: { x0: 0.0305, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        B2: { x0: 0.3493, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        B3: { x0: 0.6681, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        B4: { x0: 0.0305, y0: 0.5143, w: 0.3014, h: 0.4440 },
+        B5: { x0: 0.3493, y0: 0.5143, w: 0.3014, h: 0.4440 },
+        B6: { x0: 0.6681, y0: 0.5143, w: 0.3014, h: 0.4440 },
 
-        O1: { x0: 0.016, y0: 0.255, w: 0.204, h: 0.580 },
-        O2: { x0: 0.193, y0: 0.255, w: 0.204, h: 0.580 },
-        O3: { x0: 0.398, y0: 0.255, w: 0.204, h: 0.580 },
-        O4: { x0: 0.590, y0: 0.255, w: 0.204, h: 0.580 },
-        O5: { x0: 0.778, y0: 0.255, w: 0.204, h: 0.580 },
-        O6: { x0: 0.745, y0: 0.052, w: 0.222, h: 0.460 },
-        O7: { x0: 0.048, y0: 0.542, w: 0.218, h: 0.448 },
+        O1: { x0: 0.0305, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        O2: { x0: 0.2696, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        O3: { x0: 0.5087, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        O4: { x0: 0.7478, y0: 0.0417, w: 0.2217, h: 0.4440 },
+        O5: { x0: 0.1501, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        O6: { x0: 0.3892, y0: 0.5143, w: 0.2217, h: 0.4440 },
+        O7: { x0: 0.6283, y0: 0.5143, w: 0.2217, h: 0.4440 },
 
-        S1: { x0: 0.025, y0: 0.175, w: 0.242, h: 0.520 },
-        S2: { x0: 0.261, y0: 0.175, w: 0.242, h: 0.520 },
-        S3: { x0: 0.497, y0: 0.175, w: 0.242, h: 0.520 },
-        S4: { x0: 0.733, y0: 0.175, w: 0.242, h: 0.520 },
-        S5: { x0: 0.395, y0: 0.542, w: 0.236, h: 0.448 },
+        S1: { x0: 0.0305, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        S2: { x0: 0.3493, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        S3: { x0: 0.6681, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        S4: { x0: 0.1899, y0: 0.5143, w: 0.3014, h: 0.4440 },
+        S5: { x0: 0.5087, y0: 0.5143, w: 0.3014, h: 0.4440 },
 
-        A1: { x0: 0.024, y0: 0.240, w: 0.240, h: 0.575 },
-        A2: { x0: 0.261, y0: 0.240, w: 0.240, h: 0.575 },
-        A3: { x0: 0.495, y0: 0.240, w: 0.240, h: 0.575 },
-        A4: { x0: 0.734, y0: 0.240, w: 0.240, h: 0.575 },
-        A5: { x0: 0.738, y0: 0.542, w: 0.228, h: 0.448 }
+        A1: { x0: 0.0305, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        A2: { x0: 0.3493, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        A3: { x0: 0.6681, y0: 0.0417, w: 0.3014, h: 0.4440 },
+        A4: { x0: 0.1899, y0: 0.5143, w: 0.3014, h: 0.4440 },
+        A5: { x0: 0.5087, y0: 0.5143, w: 0.3014, h: 0.4440 }
       };
 
       const IMG_RATIO = 1376 / 768;
@@ -1185,16 +1212,26 @@
         return '$' + Number(amount).toLocaleString('es-CO') + ' COP';
       }
 
+      const SLOT_ORDER = ['top', 'bottom', 'outerwear', 'footwear', 'accessory'];
+
       function getFilteredGarments() {
         const votes = getCurrentVotes();
-        return appState.catalog.garments.filter((g) => {
-          if (appState.filters.slot !== 'all' && g.slot !== appState.filters.slot) return false;
-          if (appState.filters.style !== 'all' && !g.styles.includes(appState.filters.style)) return false;
-          if (appState.filters.occasion !== 'all' && !g.occasions.includes(appState.filters.occasion)) return false;
-          const vStatus = (votes[g.id] && votes[g.id].status) || 'pending';
-          if (appState.filters.vote !== 'all' && vStatus !== appState.filters.vote) return false;
-          return true;
-        });
+        return appState.catalog.garments
+          .filter((g) => {
+            if (appState.filters.slot !== 'all' && g.slot !== appState.filters.slot) return false;
+            if (appState.filters.style !== 'all' && !g.styles.includes(appState.filters.style)) return false;
+            if (appState.filters.occasion !== 'all' && !g.occasions.includes(appState.filters.occasion)) return false;
+            const vStatus = (votes[g.id] && votes[g.id].status) || 'pending';
+            if (appState.filters.vote !== 'all' && vStatus !== appState.filters.vote) return false;
+            return true;
+          })
+          .sort((a, b) => {
+            const slotDiff = SLOT_ORDER.indexOf(a.slot) - SLOT_ORDER.indexOf(b.slot);
+            if (slotDiff !== 0) return slotDiff;
+            const numA = parseInt(a.id.slice(1), 10) || 0;
+            const numB = parseInt(b.id.slice(1), 10) || 0;
+            return numA - numB;
+          });
       }
 
       function renderVoterButtons() {
@@ -1320,10 +1357,7 @@
           appState.filters.style,
           (id) => {
             appState.filters.style = id;
-            if (id === 'rockero') {
-              appState.activeSheetId = 'rockero';
-              renderGallery();
-            } else if (id === 'all' && appState.filters.slot === 'all') {
+            if (appState.filters.slot === 'all') {
               appState.activeSheetId = 'overview';
               renderGallery();
             }
@@ -1372,7 +1406,7 @@
 
         const ratio = (box.w * IMG_RATIO) / box.h;
         const maxH = 180;
-        const maxW = 236;
+        const maxW = 244;
         let targetW = Math.round(maxH * ratio);
         let targetH = maxH;
         if (targetW > maxW) {
@@ -1399,10 +1433,39 @@
         return wrap;
       }
 
+      function updateResultsBar(list) {
+        const total = appState.catalog.garments.length;
+        document.getElementById('visibleCountLabel').textContent = list.length;
+        document.getElementById('resultsTotalLabel').textContent = total;
+
+        const hasFilter = Object.values(appState.filters).some((v) => v !== 'all');
+        document.getElementById('btnClearViewFilters').style.display = hasFilter ? 'inline-flex' : 'none';
+
+        const parts = [];
+        if (appState.filters.slot !== 'all') {
+          const sl = appState.catalog.slots.find((s) => s.id === appState.filters.slot);
+          if (sl) parts.push(`${sl.icon} ${sl.short_name}`);
+        }
+        if (appState.filters.style !== 'all') {
+          const st = appState.catalog.styles.find((s) => s.id === appState.filters.style);
+          if (st) parts.push(`${st.icon} ${st.short_label}`);
+        }
+        if (appState.filters.occasion !== 'all') {
+          const oc = appState.catalog.occasions.find((o) => o.id === appState.filters.occasion);
+          if (oc) parts.push(`${oc.icon} ${oc.name}`);
+        }
+        if (appState.filters.vote !== 'all') {
+          const vNames = { pending: '⏳ Pendientes', approve: '✅ Aprobadas', adjust: '✏️ Con ajuste', discard: '❌ Descartadas' };
+          parts.push(vNames[appState.filters.vote] || appState.filters.vote);
+        }
+        document.getElementById('activeFiltersSummary').textContent = parts.length ? `· Filtros: ${parts.join(' + ')}` : '';
+      }
+
       function renderGarments() {
         const grid = document.getElementById('garmentsGrid');
         grid.innerHTML = '';
         const list = getFilteredGarments();
+        updateResultsBar(list);
         const votes = getCurrentVotes();
         const stylesMap = Object.fromEntries(appState.catalog.styles.map((s) => [s.id, s]));
         const slotsMap = Object.fromEntries(appState.catalog.slots.map((s) => [s.id, s]));
@@ -1486,7 +1549,7 @@
           if (g.allows_oversize) {
             const ovPill = document.createElement('span');
             ovPill.className = 'meta-pill oversize';
-            ovPill.textContent = '↔️ Slider Oversize';
+            ovPill.textContent = '↔️ Talla ajustable (Oversize)';
             pills.appendChild(ovPill);
           }
           body.appendChild(pills);
@@ -1768,18 +1831,12 @@
           if (e.key === 'Escape') document.getElementById('lightboxModal').classList.remove('open');
         });
 
-        document.getElementById('btnApproveVisible').addEventListener('click', () => {
-          if (!requireVoterSelected()) return;
-          const visible = getFilteredGarments();
-          const votes = getCurrentVotes();
-          visible.forEach((g) => {
-            const prev = votes[g.id] || {};
-            votes[g.id] = { status: 'approve', note: prev.note || '', updated_at: new Date().toISOString() };
-          });
-          appState.votesByVoter[appState.voter] = votes;
-          saveStorage();
-          renderAll();
-          showToast(`✅ ${visible.length} prendas visibles aprobadas como ${appState.voter}`);
+        document.getElementById('btnClearViewFilters').addEventListener('click', () => {
+          appState.filters = { slot: 'all', style: 'all', occasion: 'all', vote: 'all' };
+          appState.activeSheetId = 'overview';
+          renderGallery();
+          renderFilters();
+          renderGarments();
         });
 
         document.getElementById('generalProposalInput').addEventListener('input', (e) => {
@@ -1790,16 +1847,6 @@
           appState.proposalsByVoter[appState.voter] = e.target.value;
           saveStorage();
           if (appState.consensusVisible) renderConsensusTable();
-        });
-
-        document.getElementById('btnResetVoter').addEventListener('click', () => {
-          if (!requireVoterSelected()) return;
-          if (!confirm(`¿Seguro que quieres borrar todos los votos y propuestas de ${appState.voter}?`)) return;
-          appState.votesByVoter[appState.voter] = {};
-          appState.proposalsByVoter[appState.voter] = '';
-          saveStorage();
-          renderAll();
-          showToast(`Votos de ${appState.voter} reiniciados`);
         });
 
         document.getElementById('btnPartnerExport').addEventListener('click', exportCurrentVoterJson);

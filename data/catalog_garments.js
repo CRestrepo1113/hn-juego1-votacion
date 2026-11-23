@@ -79,22 +79,22 @@ window.HN_CATALOG_DATA = {
   "slots": [
     {
       "id": "top",
-      "name": "Tops (Parte Superior)",
-      "short_name": "Tops",
+      "name": "Prendas Superiores",
+      "short_name": "Superiores",
       "icon": "👕",
       "sheet_image": "assets/sheet_tops.png"
     },
     {
       "id": "bottom",
-      "name": "Bottoms (Parte Inferior)",
-      "short_name": "Bottoms",
+      "name": "Prendas Inferiores",
+      "short_name": "Inferiores",
       "icon": "👖",
       "sheet_image": "assets/sheet_bottoms.png"
     },
     {
       "id": "outerwear",
-      "name": "Outerwear y Pieza Completa",
-      "short_name": "Outerwear",
+      "name": "Chaquetas y Piezas Completas",
+      "short_name": "Chaquetas y Piezas",
       "icon": "🧥",
       "sheet_image": "assets/sheet_outerwear.png"
     },
@@ -365,8 +365,7 @@ window.HN_CATALOG_DATA = {
       ],
       "occasions": [
         "estreno_navidad",
-        "diario_u",
-        "graduacion_evento"
+        "diario_u"
       ],
       "weight_kg": 0.18,
       "base_price_cop": 32000,
@@ -419,8 +418,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Jersey Mesh",
       "description": "Camiseta deportiva transpirable de malla inspirada en fútbol callejero y athleisure.",
       "styles": [
-        "deportivo",
-        "urbano"
+        "deportivo"
       ],
       "occasions": [
         "deporte",
@@ -447,8 +445,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Camisa Unisex",
       "description": "Camisa de cuello limpio y caída fluida apta para eventos formales o estilismo aesthetic.",
       "styles": [
-        "casual_formal",
-        "aesthetic_y2k"
+        "casual_formal"
       ],
       "occasions": [
         "estreno_navidad",
@@ -477,8 +474,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Camiseta Banda",
       "description": "Camiseta boxy efecto lavado acid-wash con gráfico retro-rock original; abre el debate de tintas plastisol vs. segunda mano.",
       "styles": [
-        "rockero",
-        "urbano"
+        "rockero"
       ],
       "occasions": [
         "fiesta_cita",
@@ -494,7 +490,7 @@ window.HN_CATALOG_DATA = {
         "mezcla_polialgodon",
         "rpet_reciclado"
       ],
-      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_image": "assets/sheet_tops.png",
       "sheet_code": "T6",
       "svg_layer_slot": "layer_top",
       "is_reference_aesthetic": false
@@ -594,9 +590,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Falda Plisada",
       "description": "Falda corta plisada a cuadros o recta utilitaria abierta a cualquier avatar (100% genderless).",
       "styles": [
-        "aesthetic_y2k",
-        "urbano",
-        "rockero"
+        "aesthetic_y2k"
       ],
       "occasions": [
         "estreno_navidad",
@@ -625,8 +619,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Jogger Deportivo",
       "description": "Sudadera jogger con resorte en tobillos ideal para deporte o destacar los tenis en calle.",
       "styles": [
-        "deportivo",
-        "urbano"
+        "deportivo"
       ],
       "occasions": [
         "deporte",
@@ -654,8 +647,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Jean Ripped",
       "description": "Denim carbón/negro con lavado vintage y roturas moderadas adaptable con deslizador de entallado a grunge holgado.",
       "styles": [
-        "rockero",
-        "urbano"
+        "rockero"
       ],
       "occasions": [
         "fiesta_cita",
@@ -671,7 +663,7 @@ window.HN_CATALOG_DATA = {
         "algodon_organico",
         "mezcla_polialgodon"
       ],
-      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_image": "assets/sheet_bottoms.png",
       "sheet_code": "B6",
       "svg_layer_slot": "layer_bottom",
       "is_reference_aesthetic": false
@@ -713,9 +705,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Chaleco Urbano",
       "description": "Prenda abierta de mezclilla o lona inspirada directamente en la imagen de referencia.",
       "styles": [
-        "urbano",
-        "aesthetic_y2k",
-        "rockero"
+        "urbano"
       ],
       "occasions": [
         "estreno_navidad",
@@ -743,8 +733,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Cortavientos",
       "description": "Chaqueta ligera impermeable en bloques de color para entrenamiento o lluvia en el valle.",
       "styles": [
-        "deportivo",
-        "urbano"
+        "deportivo"
       ],
       "occasions": [
         "deporte",
@@ -771,8 +760,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Blazer Unisex",
       "description": "Saco casual-formal de corte moderno para graduación, ceremonias o estilo aesthetic limpio.",
       "styles": [
-        "casual_formal",
-        "aesthetic_y2k"
+        "casual_formal"
       ],
       "occasions": [
         "graduacion_evento",
@@ -846,7 +834,7 @@ window.HN_CATALOG_DATA = {
         "cuero_vacuno",
         "polimero_reciclado"
       ],
-      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_image": "assets/sheet_outerwear.png",
       "sheet_code": "O6",
       "svg_layer_slot": "layer_outer",
       "is_reference_aesthetic": false
@@ -859,8 +847,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Franela Grunge",
       "description": "Camisa holgada de franela a cuadros rojo/negro para llevar abierta en capas o a la cintura, icono grunge noventero.",
       "styles": [
-        "rockero",
-        "urbano"
+        "rockero"
       ],
       "occasions": [
         "diario_u",
@@ -875,7 +862,7 @@ window.HN_CATALOG_DATA = {
         "algodon_organico",
         "mezcla_polialgodon"
       ],
-      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_image": "assets/sheet_outerwear.png",
       "sheet_code": "O7",
       "svg_layer_slot": "layer_outer",
       "is_reference_aesthetic": false
@@ -918,8 +905,7 @@ window.HN_CATALOG_DATA = {
       "description": "Zapatillas de lona con suela plana de goma clásicas de la cultura skate y uso diario.",
       "styles": [
         "urbano",
-        "aesthetic_y2k",
-        "rockero"
+        "aesthetic_y2k"
       ],
       "occasions": [
         "diario_u",
@@ -974,7 +960,6 @@ window.HN_CATALOG_DATA = {
       "description": "Botín táctico o calzado cerrado sobrio adaptable a grados, eventos y estética alternativa.",
       "styles": [
         "casual_formal",
-        "aesthetic_y2k",
         "rockero"
       ],
       "occasions": [
@@ -1003,9 +988,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Bota Lona Alta",
       "description": "Zapatillas clásicas de lona negra caña alta con suela vulcanizada blanca, referente del rock alternativo, punk e indie.",
       "styles": [
-        "rockero",
-        "urbano",
-        "aesthetic_y2k"
+        "rockero"
       ],
       "occasions": [
         "diario_u",
@@ -1021,7 +1004,7 @@ window.HN_CATALOG_DATA = {
         "mezcla_polialgodon",
         "rpet_reciclado"
       ],
-      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_image": "assets/sheet_footwear.png",
       "sheet_code": "S5",
       "svg_layer_slot": "layer_shoes",
       "is_reference_aesthetic": false
@@ -1063,8 +1046,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Gafas Y2K",
       "description": "Lentes oscuros ovalados o rectangulares con estética urbana de los años 2000.",
       "styles": [
-        "aesthetic_y2k",
-        "urbano"
+        "aesthetic_y2k"
       ],
       "occasions": [
         "fiesta_cita",
@@ -1120,9 +1102,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Beanie & Cadena",
       "description": "Gorro tejido de punto suave con detalle minimalista de cadena para looks aesthetic.",
       "styles": [
-        "aesthetic_y2k",
-        "urbano",
-        "rockero"
+        "aesthetic_y2k"
       ],
       "occasions": [
         "estreno_navidad",
@@ -1150,8 +1130,7 @@ window.HN_CATALOG_DATA = {
       "short_label": "Cinturón & Cadena",
       "description": "Cinturón negro con ojales metálicos y cadena lateral plateada; visibiliza el reto de reciclaje de fornituras metálicas.",
       "styles": [
-        "rockero",
-        "aesthetic_y2k"
+        "rockero"
       ],
       "occasions": [
         "fiesta_cita",
@@ -1166,7 +1145,7 @@ window.HN_CATALOG_DATA = {
         "cuero_vacuno",
         "polimero_reciclado"
       ],
-      "sheet_image": "assets/sheet_rockero.png",
+      "sheet_image": "assets/sheet_accessories.png",
       "sheet_code": "A5",
       "svg_layer_slot": "layer_acc",
       "is_reference_aesthetic": false
