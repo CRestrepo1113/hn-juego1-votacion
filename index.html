@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hilo Nativo · Votación Catálogo de Prendas (Juego 1 v8.0)</title>
+  <style>
+    :root {
+      --bg-page: #f4f7fb;
+      --bg-sky: #e0f2fe;
+      --bg-card: #ffffff;
+      --bg-cream: #faf7ef;
+      --ink: #0f172a;
+      --ink-muted: #475569;
+      --border-w: 2.5px;
+      --shadow-comic: 3px 3px 0px #0f172a;
+      --shadow-comic-sm: 2px 2px 0px #0f172a;
+      --green: #16a34a;
+      --green-soft: #dcfce7;
+      --amber: #d97706;
+      --amber-soft: #fef3c7;
+      --red: #dc2626;
+      --red-soft: #fee2e2;
+      --blue: #0284c7;
+      --blue-soft: #e0f2fe;
+      --purple: #9333ea;
+      --purple-soft: #f3e8ff;
+      --gold: #facc15;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #dff1ff 0%, #f4f7fb 280px);
+      color: var(--ink);
+      line-height: 1.45;
+      padding-bottom: 56px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Header & Comic Cards */
+    .comic-card {
+      background: var(--bg-card);
+      border: var(--border-w) solid var(--ink);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-comic);
+    }
+
+    .topbar {
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--gold);
+      border: var(--border-w) solid var(--ink);
+      box-shadow: var(--shadow-comic-sm);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+    }
+
+    .voter-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .voter-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .pill-btn {
+      appearance: none;
+      cursor: pointer;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 2px 2px 0px var(--ink);
+      transition: transform 0.1s ease, background 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-btn:hover {
+      transform: translate(-1px, -1px);
+    }
+
+    .pill-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px var(--ink);
+    }
+
+    .pill-btn.active {
+      background: var(--gold);
+    }
+
+    .pill-btn.primary {
+      background: var(--blue);
+      color: #ffffff;
+    }
+
+    .pill-btn.success {
+      background: var(--green);
+      color: #ffffff;
+    }
+
+    /* Stats & Style Balance Bar */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat-panel {
+      padding: 14px 16px;
+    }
+
+    .stat-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+    }
+
+    .kpi-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .kpi-chip {
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fff;
+    }
+
+    .kpi-chip.ok { background: var(--green-soft); color: #14532d; }
+    .kpi-chip.adj { background: var(--amber-soft); color: #78350f; }
+    .kpi-chip.no { background: var(--red-soft); color: #7f1d1d; }
+    .kpi-chip.pend { background: #f1f5f9; color: #334155; }
+
+    .style-balance-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .style-bal-chip {
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      display: inline-block;
+    }
+
+    /* Gallery Section */
+    .gallery-section {
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .sheet-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .sheet-viewer {
+      background: var(--bg-cream);
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .sheet-viewer img {
+      display: block;
+      width: 100%;
+      max-height: 430px;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
+    .sheet-caption {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #fff;
+      border-top: 2px solid var(--ink);
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    /* Filters */
+    .filters-bar {
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .filter-group-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      min-width: 74px;
+    }
+
+    .filter-chip {
+      appearance: none;
+      cursor: pointer;
+      border: 1.8px solid var(--ink);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #fff;
+      color: var(--ink);
+      transition: background 0.15s;
+    }
+
+    .filter-chip.active {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    /* Garments Grid */
+    .garments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .garment-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.12s ease;
+    }
+
+    .garment-card.vote-approve {
+      border-color: var(--green);
+      box-shadow: 3px 3px 0px var(--green);
+    }
+
+    .garment-card.vote-adjust {
+      border-color: var(--amber);
+      box-shadow: 3px 3px 0px var(--amber);
+    }
+
+    .garment-card.vote-discard {
+      border-color: var(--red);
+      box-shadow: 3px 3px 0px var(--red);
+      opacity: 0.86;
+    }
+
+    .card-media {
+      background: var(--bg-cream);
+      border-bottom: 2px solid var(--ink);
+      padding: 10px 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .code-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #fff;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      box-shadow: var(--shadow-comic-sm);
+      z-index: 2;
+    }
+
+    .ref-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--gold);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 2px 9px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .crop-stage {
+      width: 100%;
+      height: 185px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-in;
+    }
+
+    .crop-viewport {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      height: 100%;
+      max-width: 100%;
+    }
+
+    .crop-viewport img {
+      position: absolute;
+      max-width: none;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .zoom-hint-btn {
+      margin-top: 6px;
+      appearance: none;
+      background: #fff;
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .card-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      flex: 1;
+    }
+
+    .garment-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .garment-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .slot-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: #f1f5f9;
+      border: 1.5px solid var(--ink);
+      border-radius: 8px;
+      padding: 2px 7px;
+      white-space: nowrap;
+    }
+
+    .garment-desc {
+      margin: 0;
+      font-size: 0.83rem;
+      color: var(--ink-muted);
+    }
+
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .meta-pill {
+      font-size: 0.73rem;
+      font-weight: 700;
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: #fff;
+    }
+
+    .meta-pill.oversize {
+      background: var(--blue-soft);
+    }
+
+    .materials-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding-top: 4px;
+    }
+
+    .mat-chip {
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 3px 7px;
+      border: 1px solid #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mat-chip.mixture-alert {
+      background: var(--red-soft);
+      border-color: var(--red);
+      color: #991b1b;
+    }
+
+    .vote-actions {
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1.5px dashed #cbd5e1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .vote-btn {
+      appearance: none;
+      cursor: pointer;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      padding: 7px 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: #fff;
+      color: var(--ink);
+      transition: transform 0.08s ease, background 0.15s;
+    }
+
+    .vote-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .vote-btn.active-approve {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .vote-btn.active-adjust {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    .vote-btn.active-discard {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .note-box {
+      margin-top: 6px;
+    }
+
+    .note-input {
+      width: 100%;
+      border: 1.8px solid var(--ink);
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 0.8rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 44px;
+      background: #fffbeb;
+    }
+
+    /* General Proposal Box */
+    .proposal-panel {
+      padding: 18px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .proposal-textarea {
+      width: 100%;
+      min-height: 82px;
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      resize: vertical;
+      background: #ffffff;
+      margin-top: 8px;
+    }
+
+    .consensus-proposals {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      background: #fff;
+      font-size: 0.84rem;
+    }
+
+    .consensus-proposals h4 {
+      margin: 0 0 8px;
+      font-size: 0.88rem;
+    }
+
+    .consensus-proposals ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    /* Export & Consensus Section */
+    .export-panel {
+      padding: 18px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
+    }
+
+    .export-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: #fff;
+      border: 1.8px solid var(--ink);
+      border-radius: 10px;
+      padding: 6px 11px;
+    }
+
+    .consensus-table-wrap {
+      overflow-x: auto;
+      margin-top: 14px;
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    table.consensus-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    table.consensus-table th,
+    table.consensus-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+
+    table.consensus-table th {
+      background: #f1f5f9;
+      font-weight: 800;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.84);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-dialog {
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      max-width: 1120px;
+      width: 100%;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 6px 6px 0px #000;
+    }
+
+    .lightbox-head {
+      padding: 10px 16px;
+      border-bottom: 2px solid var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-sky);
+      font-weight: 800;
+    }
+
+    .lightbox-body {
+      background: var(--bg-cream);
+      overflow: auto;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .lightbox-body img {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 10px;
+      border: 2px solid var(--ink);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--ink);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 1200;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 10px; }
+      .topbar { padding: 14px; }
+      .garments-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Barra Superior -->
+    <header class="comic-card topbar">
+      <div class="brand">
+        <div class="brand-badge">🧵</div>
+        <div>
+          <h1>Hilo Nativo · Votación Catálogo v8.0</h1>
+          <p>Árbol compacto genderless (23 ítems · 4 estilos) — Fuente directa para Django ORM</p>
+        </div>
+      </div>
+
+      <div class="voter-box" aria-label="Selector de socio votante">
+        <span class="voter-label">Votando como:</span>
+        <button type="button" class="pill-btn voter-btn" data-voter="Cristian">Cristian</button>
+        <button type="button" class="pill-btn voter-btn" data-voter="John">John</button>
+        <button type="button" class="pill-btn voter-btn" data-voter="Laura">Laura</button>
+        <button type="button" class="pill-btn voter-btn" data-voter="Mileidy">Mileidy</button>
+      </div>
+    </header>
+
+    <!-- Paneles de Resumen y Balance por Estilo -->
+    <section class="stats-grid">
+      <div class="comic-card stat-panel">
+        <div class="stat-title">Resumen del Voto (<span id="currentVoterLabel">Cristian</span>)</div>
+        <div class="kpi-row">
+          <span class="kpi-chip ok">✅ Aprobadas: <strong id="countApprove">0</strong>/23</span>
+          <span class="kpi-chip adj">✏️ Ajustar: <strong id="countAdjust">0</strong></span>
+          <span class="kpi-chip no">❌ Descartadas: <strong id="countDiscard">0</strong></span>
+          <span class="kpi-chip pend">⏳ Pendientes: <strong id="countPending">23</strong></span>
+        </div>
+      </div>
+
+      <div class="comic-card stat-panel">
+        <div class="stat-title">Cobertura por Estilo (Aprobadas + Ajustar)</div>
+        <div class="style-balance-list" id="styleBalanceContainer"></div>
+      </div>
+    </section>
+
+    <!-- Galería de Láminas Cel-Shading -->
+    <section class="comic-card gallery-section">
+      <div class="section-head">
+        <h2>🎨 Láminas Ilustradas de Prueba (Estilo Cel-Shading de Referencia)</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="pill-btn" id="btnOpenZoom">🔍 Ampliar Lámina</button>
+        </div>
+      </div>
+      <div class="sheet-tabs" id="sheetTabs"></div>
+      <div class="sheet-viewer" id="sheetViewer" title="Clic para ampliar">
+        <img id="activeSheetImg" src="assets/styles_overview.png" alt="Lámina de referencia" />
+        <div class="sheet-caption">
+          <span id="activeSheetTitle">Vista General: 4 Pilares Estéticos en Avatares de Medellín</span>
+          <span style="color:#0284c7;">Clic para hacer zoom 🔍</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filtros Rápidos -->
+    <section class="comic-card filters-bar">
+      <div class="filter-row">
+        <span class="filter-group-label">Ranura</span>
+        <div id="slotFilters" class="filter-row"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-group-label">Estilo</span>
+        <div id="styleFilters" class="filter-row"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-group-label">Ocasión</span>
+        <div id="occasionFilters" class="filter-row"></div>
+      </div>
+      <div class="filter-row" style="justify-content: space-between;">
+        <div class="filter-row">
+          <span class="filter-group-label">Estado</span>
+          <div id="voteFilters" class="filter-row"></div>
+        </div>
+        <div class="filter-row">
+          <button type="button" class="pill-btn" id="btnApproveVisible">✅ Aprobar visibles</button>
+          <button type="button" class="pill-btn" id="btnResetVoter">🗑️ Limpiar votos del socio</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catálogo de Tarjetas -->
+    <main class="garments-grid" id="garmentsGrid"></main>
+
+    <!-- Propuestas Nuevas y Comentarios Generales del Socio -->
+    <section class="comic-card proposal-panel">
+      <div class="section-head" style="margin-bottom:4px;">
+        <h2>💡 Propuestas de nuevas prendas o comentarios generales (<span id="proposalVoterLabel">Cristian</span>)</h2>
+        <span class="meta-pill">Se incluye al exportar voto y al copiar resumen</span>
+      </div>
+      <p style="margin:0; font-size:0.84rem; color:var(--ink-muted);">
+        ¿Falta alguna prenda representativa, estilo, accesorio o ajuste en los materiales/precios? Escríbelo aquí para revisarlo en equipo:
+      </p>
+      <textarea
+        id="generalProposalInput"
+        class="proposal-textarea"
+        placeholder="Ej.: Sugiero cambiar S4 por tenis tipo bota lona, o añadir una chaqueta varsity opcional para estilo urbano..."
+      ></textarea>
+    </section>
+
+    <!-- Integración Directa Django & Consenso de Socios -->
+    <section class="comic-card export-panel">
+      <div class="section-head">
+        <h2>⚙️ Integración a Django y Consenso del Equipo</h2>
+        <span class="meta-pill">Formato compatible con <code>python manage.py loaddata</code></span>
+      </div>
+      <p style="margin:0; font-size:0.86rem; color:var(--ink-muted);">
+        Cada socio puede votar desde este archivo, exportar su archivo de voto JSON y luego consolidar las 4 votaciones para generar el <em>Django Fixture</em> definitivo del Sprint 1.
+      </p>
+
+      <div class="export-controls">
+        <label class="checkbox-label">
+          <input type="checkbox" id="chkIncludeAdjust" checked />
+          Incluir ítems marcados "✏️ Ajustar" en el Fixture de Django
+        </label>
+        <button type="button" class="pill-btn success" id="btnDownloadFixture">⬇️ Descargar Django Fixture (.json)</button>
+        <button type="button" class="pill-btn primary" id="btnExportVoterJson">📤 Exportar Voto del Socio (.json)</button>
+        <button type="button" class="pill-btn" id="btnImportVotes">📥 Importar / Consolidar Votos (.json)</button>
+        <input type="file" id="fileImportVotes" class="hidden-input" accept=".json" multiple />
+        <button type="button" class="pill-btn" id="btnCopySummary">📋 Copiar Resumen (WhatsApp / Notion)</button>
+        <button type="button" class="pill-btn" id="btnToggleConsensus">🤝 Ver Tabla de Consenso (4 Socios)</button>
+      </div>
+
+      <div id="consensusSection" style="display:none; margin-top:14px;">
+        <div class="section-head" style="margin-bottom:8px;">
+          <h3 style="margin:0; font-size:0.96rem;">Matriz Consolidada (Cristian · John · Laura · Mileidy)</h3>
+          <button type="button" class="pill-btn success" id="btnDownloadConsensusFixture">⬇️ Descargar Fixture por Consenso (≥ 3/4)</button>
+        </div>
+        <div class="consensus-table-wrap">
+          <table class="consensus-table" id="consensusTable"></table>
+        </div>
+        <div class="consensus-proposals" id="consensusProposals"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightboxModal" role="dialog" aria-modal="true" aria-label="Zoom de lámina">
+    <div class="lightbox-dialog">
+      <div class="lightbox-head">
+        <span id="lightboxTitle">Lámina Ilustrada</span>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="pill-btn" id="btnPrevSheet">◀ Anterior</button>
+          <button type="button" class="pill-btn" id="btnNextSheet">Siguiente ▶</button>
+          <button type="button" class="pill-btn" id="btnCloseLightbox">✕ Cerrar</button>
+        </div>
+      </div>
+      <div class="lightbox-body">
+        <img id="lightboxImg" src="" alt="Vista ampliada" />
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toastMsg"></div>
+
+  <!-- Carga directa offline sin CORS + fallback JSON -->
+  <script src="data/catalog_garments.js"></script>
+  <script>
+    (function () {
+      const STORAGE_KEY = 'hn_juego1_votes_v1';
+      const PROPOSALS_KEY = 'hn_juego1_proposals_v1';
+      const VOTERS = ['Cristian', 'John', 'Laura', 'Mileidy'];
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      const SHEETS = [
+        { id: 'overview', label: '🌟 4 Estilos (Avatares)', src: 'assets/styles_overview.png', title: 'Vista General: 4 Pilares Estéticos en Avatares de Medellín' },
+        { id: 'top', label: '👕 Tops (T1–T5)', src: 'assets/sheet_tops.png', title: 'Lámina Tops — Camisetas, Crop Top, Jersey y Camisa (T1–T5)' },
+        { id: 'bottom', label: '👖 Bottoms (B1–B5)', src: 'assets/sheet_bottoms.png', title: 'Lámina Bottoms — Jeans, Cargo, Recto, Falda y Jogger (B1–B5)' },
+        { id: 'outerwear', label: '🧥 Outerwear (O1–O5)', src: 'assets/sheet_outerwear.png', title: 'Lámina Outerwear y Pieza Completa (O1–O5)' },
+        { id: 'footwear', label: '👟 Calzado (S1–S4)', src: 'assets/sheet_footwear.png', title: 'Lámina Calzado — Chunky, Skate, Runner y Botas (S1–S4)' },
+        { id: 'accessory', label: '🕶️ Accesorios (A1–A4)', src: 'assets/sheet_accessories.png', title: 'Lámina Accesorios — Gorra, Gafas, Bandolera y Beanie (A1–A4)' }
+      ];
+
+      // Coordenadas exactas medidas sobre las láminas PNG (1376x768) para encuadrar cada prenda
+      const CROP_BOXES = {
+        T1: { x0: 0.015, y0: 0.255, w: 0.205, h: 0.545 },
+        T2: { x0: 0.206, y0: 0.255, w: 0.205, h: 0.545 },
+        T3: { x0: 0.398, y0: 0.255, w: 0.205, h: 0.545 },
+        T4: { x0: 0.590, y0: 0.255, w: 0.205, h: 0.545 },
+        T5: { x0: 0.780, y0: 0.255, w: 0.205, h: 0.545 },
+
+        B1: { x0: 0.014, y0: 0.145, w: 0.194, h: 0.780 },
+        B2: { x0: 0.208, y0: 0.145, w: 0.194, h: 0.780 },
+        B3: { x0: 0.403, y0: 0.145, w: 0.194, h: 0.780 },
+        B4: { x0: 0.597, y0: 0.145, w: 0.194, h: 0.780 },
+        B5: { x0: 0.791, y0: 0.145, w: 0.194, h: 0.780 },
+
+        O1: { x0: 0.016, y0: 0.255, w: 0.204, h: 0.580 },
+        O2: { x0: 0.193, y0: 0.255, w: 0.204, h: 0.580 },
+        O3: { x0: 0.398, y0: 0.255, w: 0.204, h: 0.580 },
+        O4: { x0: 0.590, y0: 0.255, w: 0.204, h: 0.580 },
+        O5: { x0: 0.778, y0: 0.255, w: 0.204, h: 0.580 },
+
+        S1: { x0: 0.025, y0: 0.175, w: 0.242, h: 0.520 },
+        S2: { x0: 0.261, y0: 0.175, w: 0.242, h: 0.520 },
+        S3: { x0: 0.497, y0: 0.175, w: 0.242, h: 0.520 },
+        S4: { x0: 0.733, y0: 0.175, w: 0.242, h: 0.520 },
+
+        A1: { x0: 0.024, y0: 0.240, w: 0.240, h: 0.575 },
+        A2: { x0: 0.261, y0: 0.240, w: 0.240, h: 0.575 },
+        A3: { x0: 0.495, y0: 0.240, w: 0.240, h: 0.575 },
+        A4: { x0: 0.734, y0: 0.240, w: 0.240, h: 0.575 }
+      };
+
+      const IMG_RATIO = 1376 / 768;
+
+      const appState = {
+        catalog: null,
+        voter: 'Cristian',
+        activeSheetId: 'overview',
+        filters: {
+          slot: 'all',
+          style: 'all',
+          occasion: 'all',
+          vote: 'all'
+        },
+        votesByVoter: loadStorage(),
+        proposalsByVoter: loadProposalsStorage(),
+        consensusVisible: false
+      };
+
+      function loadStorage() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : {};
+          VOTERS.forEach((v) => {
+            if (!parsed[v]) parsed[v] = {};
+          });
+          return parsed;
+        } catch {
+          const init = {};
+          VOTERS.forEach((v) => { init[v] = {}; });
+          return init;
+        }
+      }
+
+      function loadProposalsStorage() {
+        try {
+          const raw = localStorage.getItem(PROPOSALS_KEY);
+          const parsed = raw ? JSON.parse(raw) : {};
+          VOTERS.forEach((v) => {
+            if (typeof parsed[v] !== 'string') parsed[v] = '';
+          });
+          return parsed;
+        } catch {
+          const init = {};
+          VOTERS.forEach((v) => { init[v] = ''; });
+          return init;
+        }
+      }
+
+      function saveStorage() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(appState.votesByVoter));
+          localStorage.setItem(PROPOSALS_KEY, JSON.stringify(appState.proposalsByVoter));
+        } catch (err) {
+          console.warn('No se pudo persistir en localStorage:', err);
+        }
+      }
+
+      function showToast(msg) {
+        const el = document.getElementById('toastMsg');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(showToast._timer);
+        showToast._timer = setTimeout(() => el.classList.remove('show'), 2600);
+      }
+
+      function getCurrentVotes() {
+        return appState.votesByVoter[appState.voter] || {};
+      }
+
+      function setGarmentVote(garmentId, decision) {
+        const votes = getCurrentVotes();
+        const existing = votes[garmentId] || { status: null, note: '' };
+        const nextStatus = existing.status === decision ? null : decision;
+        votes[garmentId] = {
+          status: nextStatus,
+          note: existing.note || '',
+          updated_at: new Date().toISOString()
+        };
+        if (!nextStatus && !votes[garmentId].note) {
+          delete votes[garmentId];
+        }
+        appState.votesByVoter[appState.voter] = votes;
+        saveStorage();
+        renderAll();
+      }
+
+      function setGarmentNote(garmentId, noteText) {
+        const votes = getCurrentVotes();
+        const existing = votes[garmentId] || { status: null, note: '' };
+        votes[garmentId] = {
+          status: existing.status,
+          note: noteText,
+          updated_at: new Date().toISOString()
+        };
+        if (!existing.status && !noteText.trim()) {
+          delete votes[garmentId];
+        }
+        appState.votesByVoter[appState.voter] = votes;
+        saveStorage();
+        if (appState.consensusVisible) renderConsensusTable();
+      }
+
+      function formatCOP(amount) {
+        return '$' + Number(amount).toLocaleString('es-CO') + ' COP';
+      }
+
+      function getFilteredGarments() {
+        const votes = getCurrentVotes();
+        return appState.catalog.garments.filter((g) => {
+          if (appState.filters.slot !== 'all' && g.slot !== appState.filters.slot) return false;
+          if (appState.filters.style !== 'all' && !g.styles.includes(appState.filters.style)) return false;
+          if (appState.filters.occasion !== 'all' && !g.occasions.includes(appState.filters.occasion)) return false;
+          const vStatus = (votes[g.id] && votes[g.id].status) || 'pending';
+          if (appState.filters.vote !== 'all' && vStatus !== appState.filters.vote) return false;
+          return true;
+        });
+      }
+
+      function renderVoterButtons() {
+        document.getElementById('currentVoterLabel').textContent = appState.voter;
+        document.getElementById('proposalVoterLabel').textContent = appState.voter;
+        const propInput = document.getElementById('generalProposalInput');
+        if (propInput && propInput.value !== (appState.proposalsByVoter[appState.voter] || '')) {
+          propInput.value = appState.proposalsByVoter[appState.voter] || '';
+        }
+        document.querySelectorAll('.voter-btn').forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.voter === appState.voter);
+        });
+      }
+
+      function renderStatsAndStyleBalance() {
+        const votes = getCurrentVotes();
+        const garments = appState.catalog.garments;
+        let approve = 0, adjust = 0, discard = 0, pending = 0;
+
+        garments.forEach((g) => {
+          const st = votes[g.id] ? votes[g.id].status : null;
+          if (st === 'approve') approve++;
+          else if (st === 'adjust') adjust++;
+          else if (st === 'discard') discard++;
+          else pending++;
+        });
+
+        document.getElementById('countApprove').textContent = approve;
+        document.getElementById('countAdjust').textContent = adjust;
+        document.getElementById('countDiscard').textContent = discard;
+        document.getElementById('countPending').textContent = pending;
+
+        const container = document.getElementById('styleBalanceContainer');
+        container.innerHTML = '';
+        appState.catalog.styles.forEach((st) => {
+          const totalStyle = garments.filter((g) => g.styles.includes(st.id)).length;
+          const keptStyle = garments.filter((g) => {
+            if (!g.styles.includes(st.id)) return false;
+            const v = votes[g.id] ? votes[g.id].status : null;
+            return v === 'approve' || v === 'adjust';
+          }).length;
+
+          const chip = document.createElement('span');
+          chip.className = 'style-bal-chip';
+          chip.innerHTML = `<span class="dot" style="background:${st.color}"></span> ${st.icon} ${st.short_label}: <strong>${keptStyle}/${totalStyle}</strong>`;
+          container.appendChild(chip);
+        });
+      }
+
+      function renderGallery() {
+        const tabsEl = document.getElementById('sheetTabs');
+        tabsEl.innerHTML = '';
+        SHEETS.forEach((sh) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pill-btn' + (sh.id === appState.activeSheetId ? ' active' : '');
+          btn.textContent = sh.label;
+          btn.addEventListener('click', () => {
+            appState.activeSheetId = sh.id;
+            renderGallery();
+          });
+          tabsEl.appendChild(btn);
+        });
+
+        const current = SHEETS.find((s) => s.id === appState.activeSheetId) || SHEETS[0];
+        document.getElementById('activeSheetImg').src = current.src;
+        document.getElementById('activeSheetImg').alt = current.title;
+        document.getElementById('activeSheetTitle').textContent = current.title;
+      }
+
+      function renderFilters() {
+        const makeChips = (containerId, options, currentVal, onSelect) => {
+          const el = document.getElementById(containerId);
+          el.innerHTML = '';
+          options.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'filter-chip' + (currentVal === opt.id ? ' active' : '');
+            btn.textContent = opt.label;
+            btn.addEventListener('click', () => onSelect(opt.id));
+            el.appendChild(btn);
+          });
+        };
+
+        makeChips(
+          'slotFilters',
+          [{ id: 'all', label: 'Todas (23)' }].concat(
+            appState.catalog.slots.map((s) => ({ id: s.id, label: `${s.icon} ${s.short_name}` }))
+          ),
+          appState.filters.slot,
+          (id) => { appState.filters.slot = id; renderFilters(); renderGarments(); }
+        );
+
+        makeChips(
+          'styleFilters',
+          [{ id: 'all', label: 'Todos' }].concat(
+            appState.catalog.styles.map((s) => ({ id: s.id, label: `${s.icon} ${s.short_label}` }))
+          ),
+          appState.filters.style,
+          (id) => { appState.filters.style = id; renderFilters(); renderGarments(); }
+        );
+
+        makeChips(
+          'occasionFilters',
+          [{ id: 'all', label: 'Todas' }].concat(
+            appState.catalog.occasions.map((o) => ({ id: o.id, label: `${o.icon} ${o.name}` }))
+          ),
+          appState.filters.occasion,
+          (id) => { appState.filters.occasion = id; renderFilters(); renderGarments(); }
+        );
+
+        makeChips(
+          'voteFilters',
+          [
+            { id: 'all', label: 'Todos' },
+            { id: 'pending', label: '⏳ Pendientes' },
+            { id: 'approve', label: '✅ Aprobadas' },
+            { id: 'adjust', label: '✏️ Con ajuste' },
+            { id: 'discard', label: '❌ Descartadas' }
+          ],
+          appState.filters.vote,
+          (id) => { appState.filters.vote = id; renderFilters(); renderGarments(); }
+        );
+      }
+
+      function buildCropPreview(garment) {
+        const box = CROP_BOXES[garment.id];
+        const wrap = document.createElement('div');
+        wrap.className = 'crop-stage';
+        wrap.addEventListener('click', () => openLightboxBySheetPath(garment.sheet_image, `${garment.id} · ${garment.name}`));
+
+        if (!box) {
+          const img = document.createElement('img');
+          img.src = garment.sheet_image;
+          img.alt = garment.name;
+          img.style.maxHeight = '100%';
+          wrap.appendChild(img);
+          return wrap;
+        }
+
+        const ratio = (box.w * IMG_RATIO) / box.h;
+        const viewport = document.createElement('div');
+        viewport.className = 'crop-viewport';
+        viewport.style.aspectRatio = ratio.toFixed(4);
+
+        const img = document.createElement('img');
+        img.src = garment.sheet_image;
+        img.alt = `${garment.id} ${garment.name}`;
+        img.style.width = `${(100 / box.w).toFixed(4)}%`;
+        img.style.height = `${(100 / box.h).toFixed(4)}%`;
+        img.style.left = `-${((box.x0 / box.w) * 100).toFixed(4)}%`;
+        img.style.top = `-${((box.y0 / box.h) * 100).toFixed(4)}%`;
+
+        viewport.appendChild(img);
+        wrap.appendChild(viewport);
+        return wrap;
+      }
+
+      function renderGarments() {
+        const grid = document.getElementById('garmentsGrid');
+        grid.innerHTML = '';
+        const list = getFilteredGarments();
+        const votes = getCurrentVotes();
+        const stylesMap = Object.fromEntries(appState.catalog.styles.map((s) => [s.id, s]));
+        const slotsMap = Object.fromEntries(appState.catalog.slots.map((s) => [s.id, s]));
+        const matsMap = appState.catalog.materials_reference;
+
+        if (list.length === 0) {
+          grid.innerHTML = `<div class="comic-card" style="grid-column:1/-1; padding:24px; text-align:center;">
+            <strong>No hay prendas con los filtros actuales.</strong>
+          </div>`;
+          return;
+        }
+
+        list.forEach((g) => {
+          const vote = votes[g.id] || { status: null, note: '' };
+          const card = document.createElement('article');
+          card.className = 'comic-card garment-card' + (vote.status ? ` vote-${vote.status}` : '');
+
+          const media = document.createElement('div');
+          media.className = 'card-media';
+
+          const codeBadge = document.createElement('span');
+          codeBadge.className = 'code-badge';
+          codeBadge.textContent = g.id;
+          media.appendChild(codeBadge);
+
+          if (g.is_reference_aesthetic) {
+            const refBadge = document.createElement('span');
+            refBadge.className = 'ref-badge';
+            refBadge.textContent = '⭐ Ref. Imagen';
+            media.appendChild(refBadge);
+          }
+
+          media.appendChild(buildCropPreview(g));
+
+          const zoomBtn = document.createElement('button');
+          zoomBtn.type = 'button';
+          zoomBtn.className = 'zoom-hint-btn';
+          zoomBtn.textContent = '🔍 Ver en lámina completa';
+          zoomBtn.addEventListener('click', () => openLightboxBySheetPath(g.sheet_image, `${g.id} · ${g.name}`));
+          media.appendChild(zoomBtn);
+
+          const body = document.createElement('div');
+          body.className = 'card-body';
+
+          const slotInfo = slotsMap[g.slot];
+          const titleRow = document.createElement('div');
+          titleRow.className = 'garment-title-row';
+          titleRow.innerHTML = `
+            <h3 class="garment-title">${g.name}</h3>
+            <span class="slot-tag">${slotInfo.icon} ${slotInfo.short_name}</span>
+          `;
+          body.appendChild(titleRow);
+
+          const desc = document.createElement('p');
+          desc.className = 'garment-desc';
+          desc.textContent = g.description;
+          body.appendChild(desc);
+
+          const pills = document.createElement('div');
+          pills.className = 'meta-pills';
+          g.styles.forEach((sid) => {
+            const st = stylesMap[sid];
+            if (st) {
+              const sp = document.createElement('span');
+              sp.className = 'meta-pill';
+              sp.innerHTML = `<span class="dot" style="background:${st.color}"></span> ${st.short_label}`;
+              pills.appendChild(sp);
+            }
+          });
+
+          const weightPill = document.createElement('span');
+          weightPill.className = 'meta-pill';
+          weightPill.textContent = `⚖️ ${g.weight_kg.toFixed(2)} kg`;
+          pills.appendChild(weightPill);
+
+          const pricePill = document.createElement('span');
+          pricePill.className = 'meta-pill';
+          pricePill.textContent = `💵 ${formatCOP(g.base_price_cop)}`;
+          pills.appendChild(pricePill);
+
+          if (g.allows_oversize) {
+            const ovPill = document.createElement('span');
+            ovPill.className = 'meta-pill oversize';
+            ovPill.textContent = '↔️ Slider Oversize';
+            pills.appendChild(ovPill);
+          }
+          body.appendChild(pills);
+
+          const matsRow = document.createElement('div');
+          matsRow.className = 'materials-row';
+          g.compatible_materials.forEach((mid) => {
+            const m = matsMap[mid];
+            if (!m) return;
+            const mc = document.createElement('span');
+            mc.className = 'mat-chip' + (m.es_mezcla ? ' mixture-alert' : '');
+            mc.title = m.badge_visual;
+            mc.textContent = m.es_mezcla ? `${m.icon} ${m.short_label} (Difícil)` : `${m.icon} ${m.short_label}`;
+            matsRow.appendChild(mc);
+          });
+          body.appendChild(matsRow);
+
+          const actions = document.createElement('div');
+          actions.className = 'vote-actions';
+
+          const btnApp = document.createElement('button');
+          btnApp.type = 'button';
+          btnApp.className = 'vote-btn' + (vote.status === 'approve' ? ' active-approve' : '');
+          btnApp.textContent = '✅ Aprobar';
+          btnApp.addEventListener('click', () => setGarmentVote(g.id, 'approve'));
+
+          const btnAdj = document.createElement('button');
+          btnAdj.type = 'button';
+          btnAdj.className = 'vote-btn' + (vote.status === 'adjust' ? ' active-adjust' : '');
+          btnAdj.textContent = '✏️ Ajustar';
+          btnAdj.addEventListener('click', () => setGarmentVote(g.id, 'adjust'));
+
+          const btnDis = document.createElement('button');
+          btnDis.type = 'button';
+          btnDis.className = 'vote-btn' + (vote.status === 'discard' ? ' active-discard' : '');
+          btnDis.textContent = '❌ Descartar';
+          btnDis.addEventListener('click', () => setGarmentVote(g.id, 'discard'));
+
+          actions.append(btnApp, btnAdj, btnDis);
+          body.appendChild(actions);
+
+          const noteBox = document.createElement('div');
+          noteBox.className = 'note-box';
+          const textarea = document.createElement('textarea');
+          textarea.className = 'note-input';
+          textarea.placeholder = 'Nota breve de cambio o comentario (opcional)...';
+          textarea.value = vote.note || '';
+          textarea.addEventListener('input', (e) => setGarmentNote(g.id, e.target.value));
+          noteBox.appendChild(textarea);
+          body.appendChild(noteBox);
+
+          card.append(media, body);
+          grid.appendChild(card);
+        });
+      }
+
+      function buildDjangoFixture(selectedGarments) {
+        const fixture = [];
+        let pk = 1;
+
+        Object.values(appState.catalog.materials_reference).forEach((m) => {
+          fixture.push({
+            model: 'catalog.materialtextil',
+            pk: pk++,
+            fields: {
+              slug: m.id,
+              nombre: m.name,
+              short_label: m.short_label,
+              icon: m.icon,
+              agua_l_kg: m.agua_l_kg,
+              co2_kg_kg: m.co2_kg_kg,
+              micro_g_lavado: m.micro_g_lavado,
+              circularidad_pct: m.circularidad_pct,
+              biodegradabilidad_dulce_pct: m.biodegradabilidad_dulce_pct,
+              es_mezcla: m.es_mezcla,
+              badge_visual: m.badge_visual
+            }
+          });
+        });
+
+        let opk = 1;
+        Object.values(appState.catalog.origins_reference).forEach((o) => {
+          fixture.push({
+            model: 'catalog.origenproduccion',
+            pk: opk++,
+            fields: {
+              slug: o.id,
+              nombre_ficticio: o.name,
+              color_semaforo: o.color_semaforo,
+              multiplicador_precio: o.multiplicador_precio,
+              usos_resistencia_max: o.usos_resistencia_max,
+              factor_impacto_produccion: o.factor_impacto_produccion,
+              porcentaje_salario_digno_afwa: o.porcentaje_salario_digno_afwa
+            }
+          });
+        });
+
+        selectedGarments.forEach((g, idx) => {
+          fixture.push({
+            model: 'catalog.catalogoprenda',
+            pk: idx + 1,
+            fields: {
+              code: g.id,
+              slug: g.slug,
+              ranura: g.slot,
+              nombre: g.name,
+              short_label: g.short_label,
+              descripcion: g.description,
+              estilos: g.styles,
+              ocasiones: g.occasions,
+              peso_kg: g.weight_kg,
+              precio_base_cop: g.base_price_cop,
+              permite_oversize: g.allows_oversize,
+              materiales_compatibles: g.compatible_materials,
+              svg_layer_slot: g.svg_layer_slot,
+              es_referencia_estetica: g.is_reference_aesthetic,
+              activo: true
+            }
+          });
+        });
+
+        return fixture;
+      }
+
+      function downloadJson(filename, payload) {
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function getConsensusRows() {
+        return appState.catalog.garments.map((g) => {
+          let yes = 0, adj = 0, no = 0;
+          const perVoter = {};
+          const notes = [];
+          VOTERS.forEach((v) => {
+            const entry = (appState.votesByVoter[v] || {})[g.id];
+            const st = entry ? entry.status : null;
+            perVoter[v] = st;
+            if (st === 'approve') yes++;
+            else if (st === 'adjust') adj++;
+            else if (st === 'discard') no++;
+            if (entry && entry.note && entry.note.trim()) {
+              notes.push(`${v}: ${entry.note.trim()}`);
+            }
+          });
+          return { garment: g, perVoter, yes, adj, no, keptScore: yes + adj, notes };
+        });
+      }
+
+      function renderConsensusTable() {
+        const table = document.getElementById('consensusTable');
+        const rows = getConsensusRows();
+        const iconOf = (st) => st === 'approve' ? '✅' : st === 'adjust' ? '✏️' : st === 'discard' ? '❌' : '⏳';
+
+        let html = `<thead><tr>
+          <th>Código</th><th>Prenda</th>
+          ${VOTERS.map((v) => `<th>${v}</th>`).join('')}
+          <th>Consenso (✅/✏️)</th><th>Notas de Ajuste</th>
+        </tr></thead><tbody>`;
+
+        rows.forEach((r) => {
+          const badgeColor = r.keptScore >= 3 ? '#dcfce7' : r.no >= 2 ? '#fee2e2' : '#f1f5f9';
+          html += `<tr>
+            <td><strong>${escapeHtml(r.garment.id)}</strong></td>
+            <td>${escapeHtml(r.garment.name)}</td>
+            ${VOTERS.map((v) => `<td style="text-align:center;">${iconOf(r.perVoter[v])}</td>`).join('')}
+            <td><span class="meta-pill" style="background:${badgeColor};">${r.keptScore}/4 (${r.yes}✅ · ${r.adj}✏️)</span></td>
+            <td>${r.notes.length ? escapeHtml(r.notes.join(' | ')) : '<span style="color:#94a3b8;">—</span>'}</td>
+          </tr>`;
+        });
+        html += '</tbody>';
+        table.innerHTML = html;
+
+        const propWrap = document.getElementById('consensusProposals');
+        const entries = VOTERS
+          .map((v) => ({ voter: v, text: (appState.proposalsByVoter[v] || '').trim() }))
+          .filter((e) => e.text.length > 0);
+        if (entries.length) {
+          propWrap.innerHTML = `<h4>💡 Propuestas nuevas y comentarios generales del equipo</h4><ul>${
+            entries.map((e) => `<li><strong>${escapeHtml(e.voter)}:</strong> ${escapeHtml(e.text)}</li>`).join('')
+          }</ul>`;
+        } else {
+          propWrap.innerHTML = `<h4>💡 Propuestas nuevas y comentarios generales del equipo</h4><span style="color:#64748b;">Aún no hay propuestas generales registradas.</span>`;
+        }
+      }
+
+      function openLightbox(sheetObj, customTitle) {
+        const idx = SHEETS.findIndex((s) => s.id === sheetObj.id);
+        appState.lightboxIdx = idx >= 0 ? idx : 0;
+        const modal = document.getElementById('lightboxModal');
+        document.getElementById('lightboxImg').src = sheetObj.src;
+        document.getElementById('lightboxTitle').textContent = customTitle || sheetObj.title;
+        modal.classList.add('open');
+      }
+
+      function openLightboxBySheetPath(sheetPath, customTitle) {
+        const found = SHEETS.find((s) => s.src === sheetPath) || SHEETS[0];
+        openLightbox(found, customTitle || found.title);
+      }
+
+      function renderAll() {
+        renderVoterButtons();
+        renderStatsAndStyleBalance();
+        renderGallery();
+        renderFilters();
+        renderGarments();
+        if (appState.consensusVisible) renderConsensusTable();
+      }
+
+      function bindEvents() {
+        document.querySelectorAll('.voter-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            appState.voter = btn.dataset.voter;
+            renderAll();
+          });
+        });
+
+        document.getElementById('btnOpenZoom').addEventListener('click', () => {
+          const cur = SHEETS.find((s) => s.id === appState.activeSheetId) || SHEETS[0];
+          openLightbox(cur);
+        });
+        document.getElementById('sheetViewer').addEventListener('click', () => {
+          const cur = SHEETS.find((s) => s.id === appState.activeSheetId) || SHEETS[0];
+          openLightbox(cur);
+        });
+        document.getElementById('btnCloseLightbox').addEventListener('click', () => {
+          document.getElementById('lightboxModal').classList.remove('open');
+        });
+        document.getElementById('lightboxModal').addEventListener('click', (e) => {
+          if (e.target.id === 'lightboxModal') e.target.classList.remove('open');
+        });
+        document.getElementById('btnPrevSheet').addEventListener('click', () => {
+          appState.lightboxIdx = (appState.lightboxIdx - 1 + SHEETS.length) % SHEETS.length;
+          openLightbox(SHEETS[appState.lightboxIdx]);
+        });
+        document.getElementById('btnNextSheet').addEventListener('click', () => {
+          appState.lightboxIdx = (appState.lightboxIdx + 1) % SHEETS.length;
+          openLightbox(SHEETS[appState.lightboxIdx]);
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') document.getElementById('lightboxModal').classList.remove('open');
+        });
+
+        document.getElementById('btnApproveVisible').addEventListener('click', () => {
+          const visible = getFilteredGarments();
+          const votes = getCurrentVotes();
+          visible.forEach((g) => {
+            const prev = votes[g.id] || {};
+            votes[g.id] = { status: 'approve', note: prev.note || '', updated_at: new Date().toISOString() };
+          });
+          appState.votesByVoter[appState.voter] = votes;
+          saveStorage();
+          renderAll();
+          showToast(`✅ ${visible.length} prendas visibles aprobadas como ${appState.voter}`);
+        });
+
+        document.getElementById('generalProposalInput').addEventListener('input', (e) => {
+          appState.proposalsByVoter[appState.voter] = e.target.value;
+          saveStorage();
+          if (appState.consensusVisible) renderConsensusTable();
+        });
+
+        document.getElementById('btnResetVoter').addEventListener('click', () => {
+          if (!confirm(`¿Seguro que quieres borrar todos los votos y propuestas de ${appState.voter}?`)) return;
+          appState.votesByVoter[appState.voter] = {};
+          appState.proposalsByVoter[appState.voter] = '';
+          saveStorage();
+          renderAll();
+          showToast(`Votos de ${appState.voter} reiniciados`);
+        });
+
+        document.getElementById('btnDownloadFixture').addEventListener('click', () => {
+          const includeAdj = document.getElementById('chkIncludeAdjust').checked;
+          const votes = getCurrentVotes();
+          const selected = appState.catalog.garments.filter((g) => {
+            const st = votes[g.id] ? votes[g.id].status : null;
+            return st === 'approve' || (includeAdj && st === 'adjust');
+          });
+          if (!selected.length) {
+            showToast('⚠️ Marca al menos una prenda como Aprobada antes de exportar');
+            return;
+          }
+          const fixture = buildDjangoFixture(selected);
+          downloadJson(`garments_approved_fixture_${appState.voter.toLowerCase()}.json`, fixture);
+          showToast(`⬇️ Fixture Django descargado (${selected.length} prendas)`);
+        });
+
+        document.getElementById('btnExportVoterJson').addEventListener('click', () => {
+          const payload = {
+            project: appState.catalog.project,
+            voter: appState.voter,
+            exported_at: new Date().toISOString(),
+            votes: getCurrentVotes(),
+            general_proposal: (appState.proposalsByVoter[appState.voter] || '').trim()
+          };
+          downloadJson(`voto_hn_juego1_${appState.voter.toLowerCase()}.json`, payload);
+          showToast(`📤 Voto y propuestas de ${appState.voter} exportados`);
+        });
+
+        document.getElementById('btnImportVotes').addEventListener('click', () => {
+          document.getElementById('fileImportVotes').click();
+        });
+
+        document.getElementById('fileImportVotes').addEventListener('change', async (e) => {
+          const files = Array.from(e.target.files || []);
+          let importedCount = 0;
+          for (const file of files) {
+            try {
+              const text = await file.text();
+              const data = JSON.parse(text);
+              if (data.voter && VOTERS.includes(data.voter) && data.votes) {
+                appState.votesByVoter[data.voter] = data.votes;
+                if (typeof data.general_proposal === 'string') {
+                  appState.proposalsByVoter[data.voter] = data.general_proposal;
+                }
+                importedCount++;
+              }
+            } catch (err) {
+              console.error('Archivo inválido:', file.name, err);
+            }
+          }
+          if (importedCount > 0) {
+            saveStorage();
+            appState.consensusVisible = true;
+            document.getElementById('consensusSection').style.display = 'block';
+            renderAll();
+            showToast(`📥 ${importedCount} archivo(s) de votación consolidados`);
+          } else {
+            showToast('⚠️ No se encontraron votos válidos en los archivos seleccionados');
+          }
+          e.target.value = '';
+        });
+
+        document.getElementById('btnToggleConsensus').addEventListener('click', () => {
+          appState.consensusVisible = !appState.consensusVisible;
+          document.getElementById('consensusSection').style.display = appState.consensusVisible ? 'block' : 'none';
+          if (appState.consensusVisible) renderConsensusTable();
+        });
+
+        document.getElementById('btnDownloadConsensusFixture').addEventListener('click', () => {
+          const selected = getConsensusRows()
+            .filter((r) => r.keptScore >= 3)
+            .map((r) => r.garment);
+          if (!selected.length) {
+            showToast('⚠️ Aún no hay prendas con consenso ≥ 3/4');
+            return;
+          }
+          downloadJson('garments_consensus_fixture.json', buildDjangoFixture(selected));
+          showToast(`⬇️ Fixture por consenso descargado (${selected.length} prendas)`);
+        });
+
+        document.getElementById('btnCopySummary').addEventListener('click', async () => {
+          const votes = getCurrentVotes();
+          const lines = [
+            `🧵 *Votación Catálogo Hilo Nativo — Juego 1 v8.0*`,
+            `👤 Socio: *${appState.voter}*`,
+            ``
+          ];
+          const groups = { approve: [], adjust: [], discard: [], pending: [] };
+          appState.catalog.garments.forEach((g) => {
+            const v = votes[g.id] || {};
+            const st = v.status || 'pending';
+            groups[st].push({ g, note: v.note || '' });
+          });
+
+          lines.push(`✅ *Aprobadas (${groups.approve.length}):* ${groups.approve.map((x) => `${x.g.id} ${x.g.short_label}`).join(', ') || 'Ninguna'}`);
+          if (groups.adjust.length) {
+            lines.push(``);
+            lines.push(`✏️ *Con ajuste (${groups.adjust.length}):*`);
+            groups.adjust.forEach((x) => lines.push(`- ${x.g.id} ${x.g.name}${x.note ? ': ' + x.note : ''}`));
+          }
+          if (groups.discard.length) {
+            lines.push(``);
+            lines.push(`❌ *Descartadas (${groups.discard.length}):* ${groups.discard.map((x) => `${x.g.id} ${x.g.short_label}${x.note ? ' (' + x.note + ')' : ''}`).join(', ')}`);
+          }
+          if (groups.pending.length) {
+            lines.push(``);
+            lines.push(`⏳ *Pendientes (${groups.pending.length}):* ${groups.pending.map((x) => x.g.id).join(', ')}`);
+          }
+          const genProp = (appState.proposalsByVoter[appState.voter] || '').trim();
+          if (genProp) {
+            lines.push(``);
+            lines.push(`💡 *Propuestas / Comentarios generales:*`);
+            lines.push(genProp);
+          }
+
+          const summaryText = lines.join('\n');
+          try {
+            await navigator.clipboard.writeText(summaryText);
+            showToast('📋 Resumen copiado al portapapeles');
+          } catch {
+            prompt('Copia este resumen:', summaryText);
+          }
+        });
+      }
+
+      async function init() {
+        if (window.HN_CATALOG_DATA) {
+          appState.catalog = window.HN_CATALOG_DATA;
+        } else {
+          const res = await fetch('data/catalog_garments.json');
+          appState.catalog = await res.json();
+        }
+        bindEvents();
+        renderAll();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
